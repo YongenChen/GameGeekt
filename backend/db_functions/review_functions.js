@@ -7,7 +7,7 @@ export default function createReview(connection, data) {
     return 1;
 }
 export default function editReview(connection, data) {
-    connection.query('REPLACE INTO review VALUES (?, ?, ?, ?)', [data.reviewid, data.username, data.email, data.password],
+    connection.query('REPLACE INTO review VALUES (?, ?, ?, ?)', [data.reviewid, data.rating, data.reviewbody],
         (err) => {
             if (err) throw err;
         }
@@ -27,7 +27,7 @@ export default function getUserReview(connection, data) {
     });
     return res;
 }
-export default function getUserReviews(connection, userid) { 
+export default function getAllUserReviews(connection, userid) { 
     // Query to add data:
     connection.query('SELECT * FROM review WHERE reviewerid = ?', userid, (err, res) => {
         if(err) throw err;
