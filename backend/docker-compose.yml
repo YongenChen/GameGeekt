@@ -1,0 +1,18 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: dockerpassword
+      MYSQL_DATABASE: GameGeekt_Database
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: gamegeekt
+    ports:
+      - "3306:3306"
+volumes:
+  db_data: {} 

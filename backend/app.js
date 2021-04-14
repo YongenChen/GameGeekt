@@ -1,10 +1,14 @@
+require("dotenv").config()
 const mysql = require('mysql');
+console.log(process.env)
+
 const connection = mysql.createConnection({
-  host: 'gamegeekt.cqe9cqknj29d.us-west-1.rds.amazonaws.com',
-  user: 'admin',
-  password: 'gamegeekt',
-  database: 'GameGeekt_Database'
+  host: process.env.dbhost,
+  user: process.env.dbusername,
+  password: process.env.dbpassword,
+  database: process.env.dbname
 });
+
 connection.connect((err) => {
   if (err) throw err;
   console.log('Connected!');
