@@ -1,0 +1,8 @@
+html, body, #root {
+    height: 100%;
+}
+
+#root {
+    background: linear-gradient(to left bottom, rgba(0, 100, 102, 1), rgba(27, 58, 75, 0.9), rgba(49, 34, 68, 0.9), rgba(77, 25, 77, 0.9), rgba(35, 25, 66, 0.8));
+}
+
