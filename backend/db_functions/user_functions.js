@@ -6,18 +6,6 @@ export default function createUser(connection, data) {
     });
     return 1;
 }
-export default function editUser(connection, data) {
-    connection.query('REPLACE INTO user VALUES (?, ?, ?, ?)', [data.userid, data.username, data.email, data.password],
-        (err) => {
-            if (err) throw err;
-        }
-    )
-}
-export default function deleteUser(connection, userid) {
-    connection.query('DELETE FROM user WHERE id = ?', userid, (err, result) => {
-        if (err) throw err;
-    });
-}
 
 /*
 export default function changeUserPassword(connection, data) {
