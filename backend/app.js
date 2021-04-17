@@ -24,7 +24,7 @@ const typeDefs = gql`
 
   type Review {
     reviewid: Int
-    game: Int
+    gameid: Int
     reviewer: Int
     rating: Int
     reviewbody: String
@@ -34,16 +34,20 @@ const typeDefs = gql`
     user(userid: Int): User
     game(gameid: Int): Game
     gameByTitle(name: String): Game
-    review: Review
+    review(reviewid: Int): Review
     users: [User]
     games: [Game]
     gamesGenre(genre: String): [Game]
-    gamereviews: [Review]
-    userreviews: [Review]
+    gameReviews(gameid: Int): [Review]
+    userReviews(userid: Int): [Review]
   }
 
   type Mutation {
+    createUser(username: String, email: String, password: String): Int
     addGame(name: String, genre: String): Int
+    createReview(gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Int
+    updateReview(reviewid: Int, gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Int
+    deleteReview(reviewid: Int): Int
   }
 
 `;
@@ -81,13 +85,41 @@ async function main() {
       user: async (parent, args, context, info) => {
         res = await user_functions.getUser(connection, args)
         return res
-      }
+      },
+      gameReviews: async (parent, args, context, info) => {
+        res = await review_functions.getGameReviews(connection, args)
+        return res
+      },
+      userReviews: async (parent, args, context, info) => {
+        res = await review_functions.getUserReviews(connection, args)
+        return res
+      },
+      review: async (parent, args, context, info) => {
+        res = await review_functions.getReview(connection, args)
+        return res
+      },
     },
     Mutation: {
       addGame: async (parent, args, context, info) => {
         res = await game_functions.addGame(connection, args)
         return res
-      }
+      },
+      createUser: async (parent, args, context, info) => {
+        res = await user_functions.createUser(connection, args)
+        return res
+      },
+      createReview: async (parent, args, context, info) => {
+        res = await review_functions.createReview(connection, args)
+        return res
+      },
+      updateReview: async (parent, args, context, info) => {
+        res = await review_functions.editReview(connection, args)
+        return res
+      },
+      deleteReview: async (parent, args, context, info) => {
+        res = await review_functions.deleteReview(connection, args)
+        return res
+      },
     }
   };
   

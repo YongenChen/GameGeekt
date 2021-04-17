@@ -1,7 +1,6 @@
 async function createUser(connection, data) { 
     try {
-        const user = { username: data.username, email: data.email, password: data.password };
-        await connection.execute('INSERT INTO user SET ?', user)
+        await connection.execute('INSERT INTO user SET username = ?, email = ?, password = ?', [data.username, data.email, data.password])
         return 1
     }
     catch (error) {

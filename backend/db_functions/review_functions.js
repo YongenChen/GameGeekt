@@ -1,9 +1,8 @@
 
-async function createReview(connection, data) { 
+async function createReview(connection, args) { 
     // Query to add data
     try {
-        const review = { gameid: data.gameid, reviewerid: data.reviewerid, rating: data.rating, reviewbody: data.reviewbody };
-        await connection.execute('INSERT INTO review SET ?', review)
+        await connection.execute('INSERT INTO review SET gameid = ?, reviewerid = ?, rating = ?, reviewbody = ?', [args.gameid, args.reviewerid, args.rating, args.reviewbody])
         return 1
     }
     catch (error) {
@@ -11,9 +10,9 @@ async function createReview(connection, data) {
     }
     return 0
 }
-async function editReview(connection, data) {
+async function editReview(connection, args) {
     try {
-        await connection.execute('REPLACE INTO review VALUES (?, ?, ?, ?, ?)', [data.reviewid, data.gameid, data.reviewerid, data.rating, data.reviewbody])
+        await connection.execute('REPLACE INTO review VALUES (?, ?, ?, ?, ?)', [args.reviewid, args.gameid, args.reviewerid, args.rating, args.reviewbody])
         return 1
     }
     catch (error) {
@@ -21,9 +20,9 @@ async function editReview(connection, data) {
     }
     return 0
 }
-async function deleteReview(connection, reviewid) {
+async function deleteReview(connection, args) {
     try {
-        await connection.execute('DELETE FROM review WHERE id = ?', reviewid)
+        await connection.execute('DELETE FROM review WHERE reviewid = ?', [args.reviewid])
         return 1
     }
     catch (error) {
@@ -31,10 +30,21 @@ async function deleteReview(connection, reviewid) {
     }
     return 0
 }
-
-async function getGameReviews(connection, gameid) {
+async function getReview(connection, data) { 
     try {
-        const [res] = await connection.execute('SELECT * FROM review WHERE gameid = ?', gameid)
+        [res] = await connection.execute('SELECT * FROM review WHERE reviewid = ?', [data.reviewid])
+        res = JSON.parse(JSON.stringify(res))[0]
+        return res
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return null
+}
+async function getGameReviews(connection, args) {
+    try {
+        [res] = await connection.execute('SELECT * FROM review WHERE gameid = ?', [args.gameid])
+        res = JSON.parse(JSON.stringify(res))
         return res
     }
     catch (error) {
@@ -52,9 +62,10 @@ async function getUserReview(connection, data) {
     }
     return null
 }
-async function getAllUserReviews(connection, userid) { 
+async function getUserReviews(connection, args) { 
     try {
-        const [res] = await connection.execute('SELECT * FROM review WHERE reviewerid = ?', userid)
+        [res] = await connection.execute('SELECT * FROM review WHERE reviewerid = ?', [args.userid])
+        res = JSON.parse(JSON.stringify(res))
         return res
     }
     catch (error) {
@@ -63,4 +74,4 @@ async function getAllUserReviews(connection, userid) {
     return [] 
 }
 
-module.exports = {createReview, editReview, deleteReview, getGameReviews, getUserReview, getAllUserReviews}
+module.exports = {createReview, editReview, deleteReview, getGameReviews, getUserReview, getUserReviews, getReview}
