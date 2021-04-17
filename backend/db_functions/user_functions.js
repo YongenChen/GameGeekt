@@ -1,12 +1,28 @@
-export default function createUser(connection, data) { 
-    // Query to add data:
-    const user = { username: data.username, email: data.email, password: data.password };
-    connection.query('INSERT INTO user SET ?', user, (err, res) => {
-        if(err) throw err;
-    });
-    return 1;
+async function createUser(connection, data) { 
+    try {
+        const user = { username: data.username, email: data.email, password: data.password };
+        await connection.execute('INSERT INTO user SET ?', user)
+        return 1
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return 0
+}
+async function getUser(connection, args) { 
+    try {
+        [res] = await connection.execute('SELECT * FROM user WHERE userid = ?', [args.userid])
+        res = JSON.parse(JSON.stringify(res))[0]
+        console.log(res)
+        return res
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return null
 }
 
+module.exports = {createUser, getUser}
 /*
 export default function changeUserPassword(connection, data) {
     connection.query('UPDATE user SET password = ? Where userid = ?',[data.password, data.userid],

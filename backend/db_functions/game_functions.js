@@ -1,15 +1,58 @@
-export default function addGame(connection, data) { 
-    // Query to add data:
-    const game = { name = data.name, genre = data.genre };
-    connection.query('INSERT INTO game SET ?', game, (err, res) => {
-        if(err) throw err;
-    });
-    return 1;
+
+async function addGame(connection, data) { 
+    try {
+        //const game = { name: data.name, genre: data.genre };
+        await connection.execute('INSERT INTO game SET name = ?, genre = ?', [data.name, data.genre])
+        return 1
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return 0
 }
-export default function getGamesByGenre(connection, genre) { 
-    // Query to add data:
-    connection.query('SELECT * FROM game WHERE genre = ?', genre, (err, res) => {
-        if(err) throw err;
-    });
-    return res;
+async function getGamesByGenre(connection, args) { 
+    try {
+        [res] = await connection.execute('SELECT * FROM game WHERE genre = ?', [args.genre])
+        res = JSON.parse(JSON.stringify(res))
+        return res
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return []
 }
+async function getGame(connection, args) { 
+    try {
+        [res] = await connection.execute('SELECT * FROM game WHERE gameid = ?', [args.gameid])
+        res = JSON.parse(JSON.stringify(res))[0]
+        return res
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return []
+}
+async function getGameByTitle(connection, args) { 
+    try {
+        [res] = await connection.execute('SELECT * FROM game WHERE name = ?', [args.name])
+        res = JSON.parse(JSON.stringify(res))[0]
+        return res
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return []
+}
+async function getGames(connection) { 
+    try {
+        [res] = await connection.execute('SELECT * FROM game')
+        res = JSON.parse(JSON.stringify(res))
+        return res
+    }
+    catch (error) {
+        console.error(error)
+    }
+    return []
+}
+//addGame, getGamesByGenre, 
+module.exports = {getGames, getGamesByGenre, addGame, getGame, getGameByTitle}

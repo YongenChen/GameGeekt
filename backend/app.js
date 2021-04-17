@@ -1,69 +1,114 @@
 require("dotenv").config()
-const mysql = require('mysql');
-console.log(process.env)
-
-const connection = mysql.createConnection({
-  host: process.env.dbhost,
-  user: process.env.dbusername,
-  password: process.env.dbpassword,
-  database: process.env.dbname
-});
-
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected!');
-});
-
+const mysql = require('mysql2/promise');
+//console.log(process.env)
+const { gql } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
+const user_functions = require('./db_functions/user_functions');
+const game_functions = require('./db_functions/game_functions');
+const review_functions = require('./db_functions/review_functions');
 const express = require('express')
-const app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
-app.get('/users', function(req, res) {
-  connection.query('SELECT * FROM user', (err,rows) => {
-    if(err) throw err;
-    res.send(rows);
-  })
-})
+const typeDefs = gql`
+  type User {
+    userid: Int
+    username: String
+    email: String
+    password: String
+  }
 
-app.listen(8080)
-console.log('Web server running on port 8080')
+  type Game {
+    gameid: Int
+    name: String
+    genre: String
+  }
 
-/*
-// EXAMPLE QUERIES
-// Query to get data:
-connection.query('SELECT * FROM user', (err,rows) => {
-    if(err) throw err;
+  type Review {
+    reviewid: Int
+    game: Int
+    reviewer: Int
+    rating: Int
+    reviewbody: String
+  }
+
+  type Query {
+    user(userid: Int): User
+    game(gameid: Int): Game
+    gameByTitle(name: String): Game
+    review: Review
+    users: [User]
+    games: [Game]
+    gamesGenre(genre: String): [Game]
+    gamereviews: [Review]
+    userreviews: [Review]
+  }
+
+  type Mutation {
+    addGame(name: String, genre: String): Int
+  }
+
+`;
+
+async function main() {
+  const connection = await mysql.createConnection({
+    host: process.env.dbhost,
+    user: process.env.dbusername,
+    password: process.env.dbpassword,
+    database: process.env.dbname
+  });
+  connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected!');
+  });
   
-    console.log('Data received from Db:');
-    console.log(rows);
-});
-// Query to add data:
-const user = { username: 'user', email: 'email@emails.com', password: 'pass' };
-connection.query('INSERT INTO user SET ?', user, (err, res) => {
-  if(err) throw err;
+  const resolvers = {
+    Query: {
+      game: async (parent, args, context, info) => {
+        res = await game_functions.getGame(connection, args)
+        return res
+      },
+      gameByTitle: async (parent, args, context, info) => {
+        res = await game_functions.getGameByTitle(connection, args)
+        return res
+      },
+      games: async () => {
+        res = await game_functions.getGames(connection)
+        return res
+      },
+      gamesGenre: async (parent, args, context, info) => {
+        res = await game_functions.getGamesByGenre(connection, args)
+        return res
+      },
+      user: async (parent, args, context, info) => {
+        res = await user_functions.getUser(connection, args)
+        return res
+      }
+    },
+    Mutation: {
+      addGame: async (parent, args, context, info) => {
+        res = await game_functions.addGame(connection, args)
+        return res
+      }
+    }
+  };
+  
+  const app = express();
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+  await server.start();
 
-  console.log('Last insert ID:', res.insertId);
-});
+  server.applyMiddleware({ app });
 
-// Query to update data:
-connection.query(
-  'UPDATE user SET password = ? Where userid = ?',
-  ['newpass', 1],
-  (err, result) => {
-    if (err) throw err;
+  app.use((req, res) => {
+    res.status(200);
+    res.send('Hello!');
+    res.end();
+  });
 
-    console.log(`Changed ${result.changedRows} row(s)`);
-  }
-);
+  await new Promise(resolve => app.listen({ port: 9090 }, resolve));
+  console.log(`🚀 Server ready at http://localhost:9090${server.graphqlPath}`);
+  return { server, app };
+}
 
-//Query to delete data:
-connection.query(
-  'DELETE FROM user WHERE id = ?', [1], (err, result) => {
-    if (err) throw err;
-
-    console.log(`Deleted ${result.affectedRows} row(s)`);
-  }
-);
-*/
+main()
