@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import React, { ReactElement, useState } from 'react';
 import { Computer as ComputerIcon } from '@material-ui/icons';
+import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 import { Link } from 'react-router-dom';
 
 interface Props {
@@ -65,7 +66,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/first-person-shooter"
+            to="/first-person-shooters"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -81,7 +82,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/multiplayer-online-battle-arena"
+            to="/multiplayer-online-battle-arenas"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -113,7 +114,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/simulation"
+            to="/simulations"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -161,7 +162,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/puzzle"
+            to="/puzzles"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -219,6 +220,22 @@ function Drawer({
                 variant="h6"
               >
                 Mobile Games
+              </Typography>
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to="/Request-Game-Form"
+          >
+            <ListItemIcon>
+              <AddToQueueIcon />
+            </ListItemIcon>
+            <ListItemText>
+              <Typography
+                variant="h6"
+              >
+                Request a game
               </Typography>
             </ListItemText>
           </ListItem>
