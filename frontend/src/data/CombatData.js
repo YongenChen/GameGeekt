@@ -5,14 +5,14 @@ export default [
     imageUrl: 'https://assets.nintendo.com/image/upload/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero',
   },
   {
-    title: 'Cyberpunk 2077',
-    description: 'Cyberpunk 2077 is an open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification. You play as V, a mercenary outlaw going after a one-of-a-kind implant that is the key to immortality.',
-    imageUrl: 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/capsule_616x353.jpg?t=1615811936',
-  },
-  {
     title: 'Minecraft',
     description: 'Prepare for an adventure of limitless possibilities as you build, mine, battle mobs, and explore the ever-changing Minecraft landscape.',
     imageUrl: 'https://d2e111jq13me73.cloudfront.net/sites/default/files/styles/amp_blog_image_large/public/blog/csm-blog/parentsultimateguide-minecraft-blog.jpg?itok=2beDaNo7',
+  },
+  {
+    title: 'Cyberpunk 2077',
+    description: 'Cyberpunk 2077 is an open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification. You play as V, a mercenary outlaw going after a one-of-a-kind implant that is the key to immortality.',
+    imageUrl: 'https://cdn.akamai.steamstatic.com/steam/apps/1091500/capsule_616x353.jpg?t=1615811936',
   },
   {
     title: "Assassin's Creed Syndicate",
