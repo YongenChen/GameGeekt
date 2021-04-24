@@ -69,7 +69,6 @@ const resolvers = {
       }
       const passhash = await argon2.hash(password);
       user = await userFunctions.createUser(connection, { username, email, passhash });
-      console.log(user);
       req.session.userId = user.userid;
       return user;
     },

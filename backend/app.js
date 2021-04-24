@@ -21,6 +21,8 @@ const typeDefs = gql`
     gameid: Int
     name: String
     genre: String
+    description: String
+    imglink: String
   }
 
   type Review {
@@ -105,7 +107,7 @@ async function main() {
 
   server.applyMiddleware({ app });
 
-  app.use((req, res) => {
+  app.use((_, res) => {
     res.status(200);
     res.send('Hello!');
     res.end();
