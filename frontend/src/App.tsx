@@ -84,16 +84,16 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/first-person-shooters">
+          <Route path="/first-person-shooter">
             <FirstPersonShooter />
           </Route>
-          <Route path="/multiplayer-online-battle-arenas">
+          <Route path="/multiplayer-online-battle-arena">
             <MultiplayerOnlineBattleArena />
           </Route>
           <Route path="/massively-multiplayer-online">
             <MassivelyMultiplayerOnline />
           </Route>
-          <Route path="/simulations">
+          <Route path="/simulation">
             <Simulations />
           </Route>
           <Route path="/stealth-shooter">
@@ -108,7 +108,7 @@ function App() {
           <Route path="/real-time-strategy">
             <RealTimeStrategy />
           </Route>
-          <Route path="/puzzles">
+          <Route path="/puzzle">
             <Puzzle />
           </Route>
           <Route path="/sports">
