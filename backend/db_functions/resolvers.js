@@ -103,7 +103,7 @@ const resolvers = {
       req.session.userId = user.userid;
       return user;
     },
-    signOut: async (parent, args, { res, req }, info) => (
+    logout: async (parent, args, { res, req }, info) => (
       new Promise((resolve) => req.session.destroy((err) => {
         res.clearCookie('gid');
         if (err) {
