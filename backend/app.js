@@ -45,7 +45,7 @@ const typeDefs = gql`
 
   type Mutation {
     registerUser(username: String, email: String, password: String, confirmPassword: String): User
-    addGame(name: String, genre: String): Game
+    addGame(name: String, genre: String, description: String, imglink: String): Game
     createReview(gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
     updateReview(reviewid: Int, gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
     deleteReview(reviewid: Int): Boolean

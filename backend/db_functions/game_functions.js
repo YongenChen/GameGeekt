@@ -25,10 +25,12 @@ async function getGameByTitle(connection, name) {
   }
   return [];
 }
-async function addGame(connection, { name, genre }) {
+async function addGame(connection, {
+  name, genre, description, imglink,
+}) {
   try {
     // const game = { name: data.name, genre: data.genre };
-    await connection.execute('INSERT INTO game SET name = ?, genre = ?', [name, genre]);
+    await connection.execute('INSERT INTO game SET name = ?, genre = ?, description = ?, imglink = ?', [name, genre, description, imglink]);
     return getGameByTitle(connection, { name });
   } catch (error) {
     console.error(error);

@@ -47,7 +47,9 @@ const resolvers = {
     },
   },
   Mutation: {
-    addGame: async (parent, { name, genre }, { connection, user }, info) => {
+    addGame: async (parent, {
+      name, genre, description, imglink,
+    }, { connection, user }, info) => {
       if (!user) return null;
       const res = await gameFunctions.addGame(connection, { name, genre });
       return res;
