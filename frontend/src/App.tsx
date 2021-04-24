@@ -23,6 +23,10 @@ import Puzzle from './pages/Puzzle';
 import Sports from './pages/Sports';
 import RolePlaying from './pages/RolePlaying';
 import Mobile from './pages/Mobile';
+import Footer from './components/Footer';
+import About from './pages/About';
+import ContactUs from './pages/ContactUs';
+import TheTeam from './pages/TheTeam';
 
 const createDarkTheme = () => createMuiTheme({
   palette: {
@@ -116,10 +120,20 @@ function App() {
           <Route path="/mobile-games">
             <Mobile />
           </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/contact-us">
+            <ContactUs />
+          </Route>
+          <Route path="/the-team">
+            <TheTeam />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
         </Switch>
+        <Footer />
       </Router>
     </MuiThemeProvider>
   );
