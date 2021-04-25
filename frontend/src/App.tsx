@@ -27,6 +27,7 @@ import Footer from './components/Footer';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import TheTeam from './pages/TheTeam';
+import RequestGameForm from './pages/RequestGameForm';
 
 const createDarkTheme = () => createMuiTheme({
   palette: {
@@ -128,6 +129,9 @@ function App() {
           </Route>
           <Route path="/the-team">
             <TheTeam />
+          </Route>
+          <Route path="/Request-Game-Form">
+            <RequestGameForm />
           </Route>
           <Route path="/">
             <Home />

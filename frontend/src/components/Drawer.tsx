@@ -66,7 +66,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/first-person-shooters"
+            to="/first-person-shooter"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -82,7 +82,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/multiplayer-online-battle-arenas"
+            to="/multiplayer-online-battle-arena"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -114,7 +114,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/simulations"
+            to="/simulation"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
@@ -162,7 +162,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/puzzles"
+            to="/puzzle"
           >
             <ListItemIcon>
               <ComputerIcon className={classes.computerIcon} />
