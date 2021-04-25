@@ -52,7 +52,7 @@ const typeDefs = gql`
     updateReview(reviewid: Int, gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
     deleteReview(reviewid: Int): Boolean
     login(username: String, password: String): User
-    signOut: Boolean
+    logout: Boolean
   }
 
 `;
