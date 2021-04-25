@@ -97,11 +97,11 @@ export default () => {
       pagination={{ clickable: true }}
       navigation
     >
-      {images.map((gameImg) => (
+      {images.map(() => (
         <SwiperSlide className={classes.slide}>
           <Button variant="contained" className={classes.button}>
             {/* <img src={img.src} alt={img.alt} className={classes.buttonImage} /> */}
-            { gameImg.alt }
+            Button
           </Button>
         </SwiperSlide>
       ))}
