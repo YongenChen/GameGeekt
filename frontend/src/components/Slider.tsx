@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => createStyles({
   button: {
     backgroundColor: 'rgba( 255, 255, 255, 0.25 )',
     '&:hover': {
-      backgroundColor: 'pink',
+      backgroundColor: 'rgba( 245, 166, 244, 0.25 )',
     },
     boxShadow: 'box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
     backdropFilter: 'blur(70px)',
