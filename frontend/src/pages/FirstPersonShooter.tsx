@@ -13,8 +13,9 @@ import FPSData from '../data/FPSData';
 const useStyles = makeStyles({
   gridContainer: {
     paddingTop: '10px',
-    paddingLeft: '100px',
+    paddingLeft: '50px',
     paddingRight: '50px',
+    justifyContent: 'center',
   },
   root: {
     background: ' rgba( 172, 166, 215, 0.25 )',
