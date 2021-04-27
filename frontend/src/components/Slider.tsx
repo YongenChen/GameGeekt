@@ -6,15 +6,40 @@ import {
   makeStyles,
   createStyles,
 } from '@material-ui/core/styles';
-
 // Import Swiper styles
 import 'swiper/swiper-bundle.css';
-import { Button } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+// import { Button } from '@material-ui/core';
+import CardMedia from '@material-ui/core/CardMedia';
+import { CardActionArea } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
+// import images
+import FPSImage from '../images/Valorant.jpg';
+import MOBAImage from '../images/LoL.jpg';
+import MMOImage from '../images/FFXIV.jpeg';
+import SIMImage from '../images/ACNH.jpg';
+import ADVImage from '../images/BOTW.jpg';
+import RTSImage from '../images/AoE.jpg';
+import PuzzleImage from '../images/ItTakesTwo.jpg';
+import SportsImage from '../images/RocketLeague.jpg';
+import RPGImage from '../images/Octo.jpg';
+import MobileImage from '../images/pokemonGO.png';
 
 SwiperCore.use([Pagination, Navigation]);
 const useStyles = makeStyles(() => createStyles({
+  root: {
+    background: ' rgba( 172, 166, 215, 0.25 )',
+    boxShadow: '0 8px 32px 0 rgba( 0, 0, 0, 0.37 )',
+    width: 250,
+    height: 250,
+    backdropFilter: 'blur(7 px)',
+    borderRadius: '10px',
+    border: '1px solid rgba( 255, 255, 255, 0.18 )',
+    WebkitBackdropFilter: 'blur(7.0px)',
+  },
   buttonImage: {
-    height: '300px',
+    height: '250px',
     alignSelf: 'center',
   },
 
@@ -40,48 +65,70 @@ const useStyles = makeStyles(() => createStyles({
 interface Image {
     src: string;
     alt: string;
+    path: string;
+    genre: string
 }
 
 const images: Image[] = [
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
+    src: FPSImage,
     alt: 'Valorant',
+    path: './first-person-shooter',
+    genre: 'First Person Shooter',
   },
   {
-    src: 'https://www.pcinvasion.com/wp-content/uploads/2019/11/Age-of-Empires-II-Definitive-Edition-review.jpg',
-    alt: 'Age of Empires II: Definitive Edition',
+    src: MOBAImage,
+    alt: 'League of Legends',
+    path: './multiplayer-online-battle-arena',
+    genre: 'Multiplayer Online Battle Arena',
   },
   {
-    src: 'https://media.contentapi.ea.com/content/dam/walrus/en-us/migrated-images/2017/04/reveal-swbf2-fb-meta-image-alt.png.adapt.crop191x100.1200w.png',
-    alt: 'Battlefront II',
+    src: MMOImage,
+    alt: 'FFXIV',
+    path: './massively-multiplayer-online',
+    genre: 'Massively Multiplayer Online',
   },
   {
-    src: 'https://media.altchar.com/prod/images/940_530/gm-3ca57bb6-cab6-4224-98cd-4cdf8f5d38ea-cyberpunk2077.jpeg',
-    alt: 'Cyberpunk 2077',
+    src: SIMImage,
+    alt: 'Animal Crossing New Horizons',
+    path: './simulation',
+    genre: 'Simulation',
   },
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
-    alt: 'Slide 5',
+    src: ADVImage,
+    alt: 'Legend of Zelda: Breath of the Wild',
+    path: './adventure',
+    genre: 'Adventure',
   },
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
-    alt: 'Slide 6',
+    src: RTSImage,
+    alt: 'Age of Empires',
+    path: './real-time-strategy',
+    genre: 'Real-Time Strategy',
   },
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
-    alt: 'Slide 7',
+    src: PuzzleImage,
+    alt: 'It Takes Two',
+    path: './puzzle',
+    genre: 'Puzzle',
   },
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
-    alt: 'Slide 8',
+    src: SportsImage,
+    alt: 'Rocket League',
+    path: './sports',
+    genre: 'Sports',
   },
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
-    alt: 'Slide 9',
+    src: RPGImage,
+    alt: 'Octopath Traveler',
+    path: './role-playing',
+    genre: 'Role-Playing',
   },
   {
-    src: 'https://image-cdn.essentiallysports.com/wp-content/uploads/20210121211727/valorant-personajes-2.jpg',
-    alt: 'Slide 10',
+    src: MobileImage,
+    alt: 'Pokemon GO',
+    path: '/mobile-games',
+    genre: 'Mobile',
   },
 ];
 
@@ -97,12 +144,25 @@ export default () => {
       pagination={{ clickable: true }}
       navigation
     >
-      {images.map(() => (
+      {images.map((img) => (
         <SwiperSlide className={classes.slide}>
-          <Button variant="contained" className={classes.button}>
-            {/* <img src={img.src} alt={img.alt} className={classes.buttonImage} /> */}
+          <Link underline="none" component={RouterLink} to={img.path}>
+            <Card className={classes.root} variant="outlined">
+              <CardActionArea>
+                <CardMedia
+                  className={classes.buttonImage}
+                  component="img"
+                  height="190"
+                  src={img.src}
+                  alt={img.alt}
+                  title={img.genre}
+                />
+              </CardActionArea>
+            </Card>
+          </Link>
+          {/* <Button variant="contained" className={classes.button}>
             Button
-          </Button>
+          </Button> */}
         </SwiperSlide>
       ))}
     </Swiper>
