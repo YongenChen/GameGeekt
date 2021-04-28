@@ -78,7 +78,7 @@ async function main() {
     console.log('Connected!');
   });
 
-  const redisClient = redis.createClient();
+  const redisClient = redis.createClient({ host: 'redis' });
 
   const app = express();
   app.use(

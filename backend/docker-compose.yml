@@ -14,12 +14,38 @@ services:
       MYSQL_PASSWORD: gamegeekt
     ports:
       - "3306:3306"
+    networks:
+      - app-network
   redis:
     image: redis
     volumes:
       - redis:/var/lib/redis
     ports:
       - "6379:6379"
+    networks:
+      - app-network
+    
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - .:/app
+      - node_modules:/node_modules
+    command: node app.js
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
 volumes:
   db_data: {} 
   redis:
+  node_modules:
