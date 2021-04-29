@@ -2,7 +2,7 @@ require('dotenv').config();
 const mysql = require('mysql2/promise');
 // console.log(process.env)
 const { gql } = require('apollo-server');
-const { ApolloServer, AuthenticationError } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
 const redis = require('ioredis');
 const session = require('express-session');
@@ -21,6 +21,8 @@ const typeDefs = gql`
     gameid: Int
     name: String
     genre: String
+    description: String
+    imglink: String
   }
 
   type Review {
@@ -45,12 +47,12 @@ const typeDefs = gql`
 
   type Mutation {
     registerUser(username: String, email: String, password: String, confirmPassword: String): User
-    addGame(name: String, genre: String): Game
+    addGame(name: String, genre: String, description: String, imglink: String): Game
     createReview(gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
     updateReview(reviewid: Int, gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
     deleteReview(reviewid: Int): Boolean
     login(username: String, password: String): User
-    signOut: Boolean
+    logout: Boolean
   }
 
 `;
@@ -76,7 +78,7 @@ async function main() {
     console.log('Connected!');
   });
 
-  const redisClient = redis.createClient();
+  const redisClient = redis.createClient({ host: 'redis' });
 
   const app = express();
   app.use(
@@ -105,7 +107,7 @@ async function main() {
 
   server.applyMiddleware({ app });
 
-  app.use((req, res) => {
+  app.use((_, res) => {
     res.status(200);
     res.send('Hello!');
     res.end();

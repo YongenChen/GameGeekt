@@ -47,7 +47,9 @@ const resolvers = {
     },
   },
   Mutation: {
-    addGame: async (parent, { name, genre }, { connection, user }, info) => {
+    addGame: async (parent, {
+      name, genre, description, imglink,
+    }, { connection, user }, info) => {
       if (!user) return null;
       const res = await gameFunctions.addGame(connection, { name, genre });
       return res;
@@ -67,7 +69,6 @@ const resolvers = {
       }
       const passhash = await argon2.hash(password);
       user = await userFunctions.createUser(connection, { username, email, passhash });
-      console.log(user);
       req.session.userId = user.userid;
       return user;
     },
@@ -102,7 +103,7 @@ const resolvers = {
       req.session.userId = user.userid;
       return user;
     },
-    signOut: async (parent, args, { res, req }, info) => (
+    logout: async (parent, args, { res, req }, info) => (
       new Promise((resolve) => req.session.destroy((err) => {
         res.clearCookie('gid');
         if (err) {
