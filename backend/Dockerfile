@@ -5,7 +5,7 @@ FROM node:16.0.0
 EXPOSE 9090
 # Copies index.js and the two package files from the local 
 # directory to a new app directory on the container
-COPY app.js package.json package-lock.json wait-for.sh app/
+COPY app.js package.json package-lock.json app/
 # Changes working directory to the new directory just created
 WORKDIR /app
 # Installs npm dependencies on container
