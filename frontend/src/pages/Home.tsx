@@ -19,8 +19,14 @@ const useStyles = makeStyles(() => ({
     paddingBottom: '15px',
     fontFamily: "'Bebas Neue', Roboto",
   },
+  genreText: {
+    display: 'flex',
+    paddingTop: '30px',
+    paddingLeft: '67px',
+    fontFamily: "'Bebas Neue', Roboto",
+  },
   sliderContainer: {
-    marginTop: '70px',
+    marginTop: '40px',
     marginBottom: '70px',
   },
   slideshowContainer: {
@@ -51,6 +57,9 @@ export default function Home(): ReactElement {
           </Box>
         </Grid>
       </Grid>
+      <Typography variant="h3" className={classes.genreText}>
+        Explore game genres!
+      </Typography>
       <div className={classes.sliderContainer}>
         <Slider />
       </div>
