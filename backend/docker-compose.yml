@@ -24,8 +24,7 @@ services:
       - "6379:6379"
     networks:
       - app-network
-    
-  nodejs:
+  server:
     build:
       context: .
       dockerfile: Dockerfile
@@ -37,6 +36,12 @@ services:
     volumes:
       - .:/app
       - node_modules:/node_modules
+    environment:
+      dbhost: db
+      dbport: 3306
+      dbusername: admin
+      dbpassword: gamegeekt
+      dbname: GameGeekt_Database
     command: node app.js
     networks:
       - app-network
