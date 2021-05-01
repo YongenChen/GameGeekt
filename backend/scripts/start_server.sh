@@ -1,1 +1,1 @@
-docker run --env-file .env server
+docker start server
