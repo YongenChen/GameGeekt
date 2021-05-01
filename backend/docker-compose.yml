@@ -28,8 +28,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nodejs
-    container_name: nodejs
+    image: server
+    container_name: server
     restart: unless-stopped
     ports:
       - "9090:9090"
