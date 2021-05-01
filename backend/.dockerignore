@@ -2,3 +2,5 @@ docker-compose.yml
 .eslintrc.js
 .gitignore
 readme.md
+node_modules/
+.vscode/
