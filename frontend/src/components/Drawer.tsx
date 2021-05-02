@@ -226,7 +226,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/Request-Game-Form"
+            to="/request-game-form"
           >
             <ListItemIcon>
               <AddToQueueIcon />
