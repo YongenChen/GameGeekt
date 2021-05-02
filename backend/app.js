@@ -78,7 +78,7 @@ async function main() {
     console.log('Connected!');
   });
 
-  const redisClient = redis.createClient({ host: 'redis' });
+  const redisClient = redis.createClient({ host: process.env.redishost });
 
   const app = express();
   app.use(
@@ -90,7 +90,7 @@ async function main() {
       resave: false,
       // Change secure to true before deploying
       cookie: {
-        httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax',
+        httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax',
       },
     }),
   );
