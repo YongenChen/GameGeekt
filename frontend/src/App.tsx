@@ -7,6 +7,8 @@ import {
 } from 'react-router-dom';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import Home from './pages/Home';
 import AppBar from './components/AppBar';
 import Login from './pages/Login';
@@ -28,6 +30,24 @@ import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
+
+const client = new ApolloClient({
+  uri: process.env.graphqlServerUrl,
+  cache: new InMemoryCache(),
+});
+
+client
+  .query({
+    query: gql`
+      query GetUserInfo {
+         userid
+         username
+         email
+         password
+      }
+    `,
+  })
+  .then((result) => console.log(result));
 
 const createDarkTheme = () => createMuiTheme({
   palette: {
@@ -72,74 +92,76 @@ function App() {
   };
 
   return (
-    <MuiThemeProvider theme={globalTheme}>
-      <Router>
-        <CssBaseline />
-        <AppBar
-          getGlobalTheme={getGlobalTheme}
-        />
-        <Switch>
-          <Route path="/sign-up">
-            <SignUp />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/first-person-shooter">
-            <FirstPersonShooter />
-          </Route>
-          <Route path="/multiplayer-online-battle-arena">
-            <MultiplayerOnlineBattleArena />
-          </Route>
-          <Route path="/massively-multiplayer-online">
-            <MassivelyMultiplayerOnline />
-          </Route>
-          <Route path="/simulation">
-            <Simulations />
-          </Route>
-          <Route path="/stealth-shooter">
-            <StealthShooter />
-          </Route>
-          <Route path="/combat">
-            <Combat />
-          </Route>
-          <Route path="/adventure">
-            <Adventure />
-          </Route>
-          <Route path="/real-time-strategy">
-            <RealTimeStrategy />
-          </Route>
-          <Route path="/puzzle">
-            <Puzzle />
-          </Route>
-          <Route path="/sports">
-            <Sports />
-          </Route>
-          <Route path="/role-playing">
-            <RolePlaying />
-          </Route>
-          <Route path="/mobile-games">
-            <Mobile />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/contact-us">
-            <ContactUs />
-          </Route>
-          <Route path="/the-team">
-            <TheTeam />
-          </Route>
-          <Route path="/Request-Game-Form">
-            <RequestGameForm />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-        <Footer />
-      </Router>
-    </MuiThemeProvider>
+    <ApolloProvider client={client}>
+      <MuiThemeProvider theme={globalTheme}>
+        <Router>
+          <CssBaseline />
+          <AppBar
+            getGlobalTheme={getGlobalTheme}
+          />
+          <Switch>
+            <Route path="/sign-up">
+              <SignUp />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/first-person-shooter">
+              <FirstPersonShooter />
+            </Route>
+            <Route path="/multiplayer-online-battle-arena">
+              <MultiplayerOnlineBattleArena />
+            </Route>
+            <Route path="/massively-multiplayer-online">
+              <MassivelyMultiplayerOnline />
+            </Route>
+            <Route path="/simulation">
+              <Simulations />
+            </Route>
+            <Route path="/stealth-shooter">
+              <StealthShooter />
+            </Route>
+            <Route path="/combat">
+              <Combat />
+            </Route>
+            <Route path="/adventure">
+              <Adventure />
+            </Route>
+            <Route path="/real-time-strategy">
+              <RealTimeStrategy />
+            </Route>
+            <Route path="/puzzle">
+              <Puzzle />
+            </Route>
+            <Route path="/sports">
+              <Sports />
+            </Route>
+            <Route path="/role-playing">
+              <RolePlaying />
+            </Route>
+            <Route path="/mobile-games">
+              <Mobile />
+            </Route>
+            <Route path="/about">
+              <About />
+            </Route>
+            <Route path="/contact-us">
+              <ContactUs />
+            </Route>
+            <Route path="/the-team">
+              <TheTeam />
+            </Route>
+            <Route path="/Request-Game-Form">
+              <RequestGameForm />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+          <Footer />
+        </Router>
+      </MuiThemeProvider>
+    </ApolloProvider>
   );
 }
 
