@@ -65,7 +65,7 @@ export default function Login(): ReactElement {
     initialValues,
     validate,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      console.log(values);
     },
   });
 
@@ -97,6 +97,7 @@ export default function Login(): ReactElement {
             autoComplete="email"
             required
             fullWidth
+            disabled={formik.isSubmitting}
           />
           <TextField
             error={formik.touched.password && Boolean(formik.errors.password)}
@@ -111,10 +112,12 @@ export default function Login(): ReactElement {
             autoComplete="new-password"
             required
             fullWidth
+            disabled={formik.isSubmitting}
           />
           <Button
             type="submit"
             variant="contained"
+            disabled={!formik.isValid}
           >
             Log In
           </Button>

@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { gql, useMutation } from '@apollo/client';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -31,21 +32,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const REGISTER_USER = gql`
+mutation registerUser($username: String!,
+  $email: String!,
+  $password: String!,
+  $confirmPassword: String!) {
+  registerUser(username: $username,
+    email: $email,
+    password: $password,
+    confirmPassword: $confirmPassword) {
+        userid,
+        username
+  }
+}
+`;
+
 interface ISignUp {
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
 interface ISignUpError {
+  username?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
 }
 
-const initialValues:ISignUp = { email: '', password: '', confirmPassword: '' };
+const initialValues:ISignUp = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
 const validate = (values:ISignUp) => {
   const errors:ISignUpError = {};
+  if (!values.username) {
+    errors.username = 'Your username is required';
+  }
+
   if (!values.email) {
     errors.email = 'Your email is required';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -70,11 +97,20 @@ const validate = (values:ISignUp) => {
 
 export default function SignUp(): ReactElement {
   const classes = useStyles();
+  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
+  console.log(data, loading, error);
   const formik = useFormik({
     initialValues,
     validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      await registerUser({
+        variables: {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+        },
+      });
     },
   });
 
@@ -89,10 +125,20 @@ export default function SignUp(): ReactElement {
         >
           <b>Sign Up</b>
         </Typography>
-        <form
-          className={classes.form}
-          onSubmit={formik.handleSubmit}
-        >
+        <div className={classes.form}>
+          <TextField
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+            label="Username"
+            name="username"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.username}
+            variant="outlined"
+            required
+            fullWidth
+            disabled={formik.isSubmitting}
+          />
           <TextField
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
@@ -106,6 +152,7 @@ export default function SignUp(): ReactElement {
             autoComplete="email"
             required
             fullWidth
+            disabled={formik.isSubmitting}
           />
           <TextField
             error={formik.touched.password && Boolean(formik.errors.password)}
@@ -120,6 +167,7 @@ export default function SignUp(): ReactElement {
             autoComplete="new-password"
             required
             fullWidth
+            disabled={formik.isSubmitting}
           />
           <TextField
             error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
@@ -134,10 +182,15 @@ export default function SignUp(): ReactElement {
             autoComplete="new-password"
             required
             fullWidth
+            disabled={formik.isSubmitting}
           />
           <Button
-            type="submit"
+            onClick={() => {
+              formik.handleSubmit();
+            }}
+            type="button"
             variant="contained"
+            disabled={!formik.isValid}
           >
             Sign Up
           </Button>
@@ -147,7 +200,7 @@ export default function SignUp(): ReactElement {
             <Link to="/login">here</Link>
             .
           </FormHelperText>
-        </form>
+        </div>
       </div>
     </Container>
   );

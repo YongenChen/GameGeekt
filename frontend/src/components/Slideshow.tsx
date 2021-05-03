@@ -53,14 +53,12 @@ export default () => {
     <Swiper
       spaceBetween={0}
       slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
       pagination={{ clickable: true }}
       centeredSlides
       autoplay={{ delay: 2500, disableOnInteraction: false }}
     >
       {images.map((img) => (
-        <SwiperSlide className={classes.slide}>
+        <SwiperSlide className={classes.slide} key={img.alt}>
           <img src={img.src} alt={img.alt} className={classes.slideImage} />
         </SwiperSlide>
       ))}
