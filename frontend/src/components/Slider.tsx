@@ -9,7 +9,6 @@ import {
 // Import Swiper styles
 import 'swiper/swiper-bundle.css';
 import Card from '@material-ui/core/Card';
-// import { Button } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
 import { CardActionArea } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
@@ -139,13 +138,11 @@ export default () => {
       spaceBetween={20}
       slidesPerView={3}
       loop
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
       pagination={{ clickable: true }}
       navigation
     >
       {images.map((img) => (
-        <SwiperSlide className={classes.slide}>
+        <SwiperSlide className={classes.slide} key={img.alt}>
           <Link underline="none" component={RouterLink} to={img.path}>
             <Card className={classes.root} variant="outlined">
               <CardActionArea>
@@ -160,9 +157,6 @@ export default () => {
               </CardActionArea>
             </Card>
           </Link>
-          {/* <Button variant="contained" className={classes.button}>
-            Button
-          </Button> */}
         </SwiperSlide>
       ))}
     </Swiper>

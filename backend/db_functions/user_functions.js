@@ -7,6 +7,15 @@ async function getUser(connection, userid) {
   }
   return null;
 }
+async function getUsers(connection) {
+  try {
+    const [res] = await connection.execute('SELECT * FROM user');
+    return JSON.parse(JSON.stringify(res));
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
+}
 async function getUserByName(connection, username) {
   try {
     const [res] = await connection.execute('SELECT * FROM user WHERE username = ?', [username]);
@@ -29,7 +38,7 @@ async function createUser(connection, { username, email, passhash }) {
 }
 
 module.exports = {
-  createUser, getUser, getUserByName,
+  createUser, getUser, getUserByName, getUsers,
 };
 /*
 export default function changeUserPassword(connection, data) {

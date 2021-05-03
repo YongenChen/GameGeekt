@@ -26,6 +26,10 @@ const resolvers = {
       const res = await userFunctions.getUser(connection, userid);
       return res;
     },
+    users: async (parent, args, { connection }, info) => {
+      const res = await userFunctions.getUsers(connection);
+      return res;
+    },
     /*
     userByUsername: async (parent, args, { connection }, info) => {
       const res = await userFunctions.getUser(connection, args.username);

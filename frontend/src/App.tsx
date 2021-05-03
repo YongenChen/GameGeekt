@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import Home from './pages/Home';
 import AppBar from './components/AppBar';
@@ -32,22 +32,11 @@ import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
 
 const client = new ApolloClient({
-  uri: process.env.graphqlServerUrl,
+  uri: process.env.REACT_APP_GRAPHQL_SERVER_URL,
   cache: new InMemoryCache(),
 });
 
-client
-  .query({
-    query: gql`
-      query GetUserInfo {
-         userid
-         username
-         email
-         password
-      }
-    `,
-  })
-  .then((result) => console.log(result));
+console.log(process.env.REACT_APP_GRAPHQL_SERVER_URL);
 
 const createDarkTheme = () => createMuiTheme({
   palette: {
