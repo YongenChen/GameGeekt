@@ -25,6 +25,16 @@ async function getGameByTitle(connection, name) {
   }
   return [];
 }
+async function searchGamesByTitle(connection, title) {
+  try {
+    const quer = `%${title}%`;
+    const [res] = await connection.execute('SELECT * FROM game WHERE name LIKE ?', [quer]);
+    return JSON.parse(JSON.stringify(res));
+  } catch (error) {
+    console.error(error);
+  }
+  return [];
+}
 async function addGame(connection, {
   name, genre, description, imglink,
 }) {
@@ -48,5 +58,5 @@ async function getGames(connection) {
 }
 // addGame, getGamesByGenre,
 module.exports = {
-  getGames, getGamesByGenre, addGame, getGame, getGameByTitle,
+  getGames, getGamesByGenre, addGame, getGame, getGameByTitle, searchGamesByTitle,
 };

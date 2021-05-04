@@ -18,6 +18,10 @@ const resolvers = {
       const res = await gameFunctions.getGame(connection, gameid);
       return res;
     },
+    gamesByTitle: async (parent, { title }, { connection }, info) => {
+      const res = await gameFunctions.searchGamesByTitle(connection, title);
+      return res;
+    },
     gameByTitle: async (parent, { name }, { connection }, info) => {
       const res = await gameFunctions.getGameByTitle(connection, name);
       return res;

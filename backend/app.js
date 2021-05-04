@@ -37,6 +37,7 @@ const typeDefs = gql`
     currentUser(id: Int): User
     user(userid: Int): User
     game(gameid: Int): Game
+    gamesByTitle(title: String): [Game]
     gameByTitle(name: String): Game
     review(reviewid: Int): Review
     users: [User]
