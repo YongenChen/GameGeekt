@@ -2,7 +2,8 @@ require('dotenv').config();
 const mysql = require('mysql2/promise');
 // console.log(process.env)
 const { gql } = require('apollo-server');
-const { ApolloServer, ApolloLink } = require('apollo-server-express');
+const cors = require('cors');
+const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
 const redis = require('ioredis');
 const session = require('express-session');
@@ -78,10 +79,15 @@ async function main() {
     console.log('Connected!');
   });
 
+  const corsOptions = {
+    origin: process.env.origin,
+    credentials: true, // <-- REQUIRED backend setting
+  };
   const redisClient = redis.createClient({ host: process.env.redishost });
 
   const app = express();
   app.use(
+    cors(corsOptions),
     session({
       store: new RedisStore({ client: redisClient, disableTouch: true }),
       name: 'gid',
