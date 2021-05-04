@@ -28,7 +28,7 @@ const typeDefs = gql`
   type Review {
     reviewid: Int
     gameid: Int
-    reviewer: Int
+    reviewerid: Int
     rating: Int
     reviewbody: String
   }

@@ -27,7 +27,7 @@ interface IParams {
 interface IGameReview {
     reviewid: number;
     gameid: number;
-    reviewer: number;
+    reviewerid: number;
     rating: string;
     reviewbody: string;
 }
@@ -45,7 +45,7 @@ query getGameReviews($gameid: Int) {
     gameReviews(gameid: $gameid) {
       reviewid
       gameid
-      reviewer
+      reviewerid
       rating
       reviewbody
     }
@@ -54,7 +54,7 @@ query getGameReviews($gameid: Int) {
 
 function GameReviewItem({
   gameReview: {
-    reviewid, gameid, reviewer, rating,
+    reviewid, gameid, reviewerid, rating,
   },
 }: IGameReviewItemProps): ReactElement {
   return (
@@ -62,7 +62,7 @@ function GameReviewItem({
       {reviewid}
       {gameid}
       {' '}
-      {reviewer}
+      {reviewerid}
       {' '}
       {rating}
     </ListItem>
