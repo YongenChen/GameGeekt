@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { gql, useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,7 +9,34 @@ import CardMedia from '@material-ui/core/CardMedia';
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
-import MOBAData from '../data/MOBAData';
+
+interface gamesGenre {
+  gameid: number;
+  name: string;
+  genre: string;
+  description: string;
+  imglink: string;
+}
+
+interface gamesData {
+  gamesGenre: gamesGenre[];
+}
+
+interface gamesVar {
+  genre: string;
+}
+
+const GET_GAMES = gql`
+  query GetGames($genre: String){
+    gamesGenre(genre: $genre){
+      gameid,
+      name,
+      genre,
+      description,
+      imglink
+    }
+  }
+  `;
 
 const useStyles = makeStyles({
   gridContainer: {
@@ -48,49 +76,56 @@ const useStyles = makeStyles({
 
 export default function MultiplayerOnlineBattleArena(): ReactElement {
   const classes = useStyles();
+  const { loading, data } = useQuery<gamesData, gamesVar>(
+    GET_GAMES, { variables: { genre: 'MOBA' } },
+  );
   return (
-    <>
+    <div>
       <Typography variant="h2" gutterBottom className={classes.genreTitle}>
         Multiplayer Online Battle Arena (MOBA)
       </Typography>
-      <Grid
-        container
-        spacing={6}
-        className={classes.gridContainer}
-        justify="space-evenly"
-      >
-        { MOBAData.map((MOBAGame) => (
-          <Grid item xs={12} sm={7} md={4}>
-            <Card className={classes.root} variant="outlined">
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="190"
-                  src={MOBAGame.imageUrl}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    { MOBAGame.title }
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    { MOBAGame.description }
-                  </Typography>
-                </CardContent>
-                <CardContent>
-                  <Typography variant="h6" color="textSecondary" component="p">
-                    Rating:
-                  </Typography>
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarHalfIcon />
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </>
+      {loading ? (
+        <p>Loading ...</p>
+      ) : (
+        <Grid
+          container
+          spacing={6}
+          className={classes.gridContainer}
+          justify="space-evenly"
+        >
+          {data!.gamesGenre.map((game) => (
+            <Grid item xs={12} sm={7} md={4}>
+              <Card className={classes.root} variant="outlined">
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="190"
+                    src={game.imglink}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      { game.name }
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      { game.description }
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography variant="h6" color="textSecondary" component="p">
+                      Rating:
+                    </Typography>
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarHalfIcon />
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </div>
   );
 }

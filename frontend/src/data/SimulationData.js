@@ -1,7 +1,7 @@
 export default [
   {
     title: 'Sims 4',
-    description: 'The Sims 4 is the life simulation game that gives you the power to create and control people. Experience the creativity, humor, escape, and the freedom to play with life in The Sims 4. ',
+    description: 'The Sims 4 is the life simulation game that gives you the power to create and control people. Experience the creativity, humor, escape, and the freedom to play with life in The Sims 4.',
     imageUrl: 'https://media.contentapi.ea.com/content/dam/eacom/SIMS/brand-refresh-assets/images/2019/07/ts4-featured-image-base-refresh.png.adapt.crop191x100.1200w.png',
   },
   {

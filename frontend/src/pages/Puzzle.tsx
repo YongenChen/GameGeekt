@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { gql, useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,7 +9,34 @@ import CardMedia from '@material-ui/core/CardMedia';
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
-import PuzzleData from '../data/PuzzleData';
+
+interface gamesGenre {
+  gameid: number;
+  name: string;
+  genre: string;
+  description: string;
+  imglink: string;
+}
+
+interface gamesData {
+  gamesGenre: gamesGenre[];
+}
+
+interface gamesVar {
+  genre: string;
+}
+
+const GET_GAMES = gql`
+  query GetGames($genre: String){
+    gamesGenre(genre: $genre){
+      gameid,
+      name,
+      genre,
+      description,
+      imglink
+    }
+  }
+  `;
 
 const useStyles = makeStyles({
   gridContainer: {
@@ -48,49 +76,56 @@ const useStyles = makeStyles({
 
 export default function Puzzle(): ReactElement {
   const classes = useStyles();
+  const { loading, data } = useQuery<gamesData, gamesVar>(
+    GET_GAMES, { variables: { genre: 'Puzzle' } },
+  );
   return (
-    <>
+    <div>
       <Typography variant="h2" gutterBottom className={classes.genreTitle}>
         Puzzle
       </Typography>
-      <Grid
-        container
-        spacing={6}
-        className={classes.gridContainer}
-        justify="space-evenly"
-      >
-        { PuzzleData.map((PuzzleGame) => (
-          <Grid item xs={12} sm={7} md={4}>
-            <Card className={classes.root} variant="outlined">
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="190"
-                  src={PuzzleGame.imageUrl}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    { PuzzleGame.title }
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    { PuzzleGame.description }
-                  </Typography>
-                </CardContent>
-                <CardContent>
-                  <Typography variant="h6" color="textSecondary" component="p">
-                    Rating:
-                  </Typography>
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarIcon />
-                  <StarHalfIcon />
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </>
+      {loading ? (
+        <p>Loading ...</p>
+      ) : (
+        <Grid
+          container
+          spacing={6}
+          className={classes.gridContainer}
+          justify="space-evenly"
+        >
+          {data!.gamesGenre.map((game) => (
+            <Grid item xs={12} sm={7} md={4}>
+              <Card className={classes.root} variant="outlined">
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="190"
+                    src={game.imglink}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      { game.name }
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      { game.description }
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography variant="h6" color="textSecondary" component="p">
+                      Rating:
+                    </Typography>
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarHalfIcon />
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </div>
   );
 }
