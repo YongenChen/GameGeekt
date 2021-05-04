@@ -30,6 +30,7 @@ import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
+import TestPage from './pages/testPage';
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPHQL_SERVER_URL,
@@ -89,6 +90,9 @@ function App() {
             getGlobalTheme={getGlobalTheme}
           />
           <Switch>
+            <Route path="/testPage">
+              <TestPage />
+            </Route>
             <Route path="/sign-up">
               <SignUp />
             </Route>

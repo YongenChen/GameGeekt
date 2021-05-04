@@ -80,11 +80,6 @@ async function main() {
 
   const redisClient = redis.createClient({ host: process.env.redishost });
 
-  const link = ApolloLink.createHttpLink({
-    uri: '/graphql',
-    credentials: 'include',
-  });
-
   const app = express();
   app.use(
     session({
@@ -97,7 +92,6 @@ async function main() {
       cookie: {
         httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax',
       },
-      link,
     }),
   );
   const server = new ApolloServer({
