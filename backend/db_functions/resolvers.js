@@ -19,7 +19,7 @@ const resolvers = {
       return res;
     },
     gamesGenre: async (parent, { genre }, { connection }, info) => {
-      const res = await gameFunctions.getGamesByGenre(genre, genre);
+      const res = await gameFunctions.getGamesByGenre(connection, genre);
       return res;
     },
     user: async (parent, { userid }, { connection }, info) => {
