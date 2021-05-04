@@ -1,13 +1,12 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
-// console.log(process.env)
 const { gql } = require('apollo-server');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
 const redis = require('ioredis');
 const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
+const connectRedis = require('connect-redis');
 const resolvers = require('./db_functions/resolvers');
 
 const typeDefs = gql`
@@ -35,6 +34,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    currentUser(id: Int): User
     user(userid: Int): User
     game(gameid: Int): Game
     gameByTitle(name: String): Game
@@ -78,16 +78,17 @@ async function main() {
     }
     console.log('Connected!');
   });
-
-  const corsOptions = {
-    origin: process.env.origin,
-    credentials: true, // <-- REQUIRED backend setting
-  };
+  const RedisStore = connectRedis(session);
   const redisClient = redis.createClient({ host: process.env.redishost });
 
   const app = express();
   app.use(
-    cors(corsOptions),
+    cors({
+      origin: process.env.origin,
+      credentials: true, // <-- REQUIRED backend setting
+    }),
+  );
+  app.use(
     session({
       store: new RedisStore({ client: redisClient, disableTouch: true }),
       name: 'gid',
@@ -96,7 +97,7 @@ async function main() {
       resave: false,
       // Change secure to true before deploying
       cookie: {
-        httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax',
+        httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax',
       },
     }),
   );
@@ -111,7 +112,7 @@ async function main() {
   });
   await server.start();
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   app.use((_, res) => {
     res.status(200);

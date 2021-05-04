@@ -1,4 +1,5 @@
 /* eslint-disable no-debugger */
+
 import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
@@ -7,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import Home from './pages/Home';
 import AppBar from './components/AppBar';
@@ -32,8 +33,13 @@ import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
 import TestPage from './pages/testPage';
 
-const client = new ApolloClient({
+const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_SERVER_URL,
+  credentials: 'include',
+});
+
+const client = new ApolloClient({
+  link,
   cache: new InMemoryCache(),
 });
 

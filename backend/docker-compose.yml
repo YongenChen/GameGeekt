@@ -43,7 +43,7 @@ services:
       dbpassword: gamegeekt
       dbname: GameGeekt_Database
       redishost: redis
-      origin: "localhost:3000"
+      origin: http://localhost:3000
     command: node app.js
     networks:
       - app-network

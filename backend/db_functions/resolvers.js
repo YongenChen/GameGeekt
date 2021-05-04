@@ -6,6 +6,14 @@ const userFunctions = require('./user_functions');
 
 const resolvers = {
   Query: {
+    currentUser: async (parent, args, { connection, req }, info) => {
+      const id = req.session.userId;
+      if (!id) {
+        return null;
+      }
+      const user = await userFunctions.getUser(connection, id);
+      return user;
+    },
     game: async (parent, { gameid }, { connection }, info) => {
       const res = await gameFunctions.getGame(connection, gameid);
       return res;
