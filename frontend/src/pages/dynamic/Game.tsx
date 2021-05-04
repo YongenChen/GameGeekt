@@ -15,6 +15,11 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
   },
 }));
+
+interface IVariables {
+    gameid: number;
+}
+
 interface IParams {
     id: string;
 }
@@ -67,7 +72,7 @@ function GameReviewItem({
 function Game(): ReactElement {
   const classes = useStyles();
   const { id } = useParams<IParams>();
-  const { data, loading, error } = useQuery<IResponse>(GET_GAME_REVIEWS, {
+  const { data, loading, error } = useQuery<IResponse, IVariables>(GET_GAME_REVIEWS, {
     variables: {
       gameid: +id,
     },
