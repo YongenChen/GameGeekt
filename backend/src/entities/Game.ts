@@ -18,7 +18,9 @@ export default class Game extends BaseEntity {
     name: string;
 
     @Field()
-    @Column({ type: 'varchar', unique: false, length: 3000 })
+    @Column({
+      type: 'varchar', unique: false, length: 3000, default: 'No Genre',
+    })
     genre: string;
 
     @Field()

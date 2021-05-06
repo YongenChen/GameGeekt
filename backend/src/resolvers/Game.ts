@@ -29,11 +29,13 @@ export default class GameResolver {
   }
 
   @Query(() => Game)
-  async searchGamesByGenre(@Arg('genre', () => String) genre: string) : Promise<Game|null> {
+  async searchGamesByGenre(@Arg('genre', () => String) genre: string) : Promise<Game[]> {
     if (!genre) {
       throw new UserInputError('Genre is required.');
     }
-    return Game.find({ where: { genre: Like(`%${genre}`) } });
+    const games = await Game.find({ where: { genre: Like(`%${genre}%`) } });
+    console.log(games);
+    return games;
   }
 
   @Mutation(() => Game)
