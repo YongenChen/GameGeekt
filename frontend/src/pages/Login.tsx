@@ -1,9 +1,11 @@
 import React, { ReactElement } from 'react';
 import {
-  Container, makeStyles, Typography, TextField, Button, FormHelperText,
+  Container, makeStyles, Typography, TextField, Button, FormHelperText, Fade, CircularProgress,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { AlertTitle, Alert } from '@material-ui/lab';
+import { gql, useMutation } from '@apollo/client';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -15,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
+    marginBottom: theme.spacing(3),
+  },
+  alertContainer: {
+    textAlign: 'left',
+    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
   },
   form: {
@@ -29,25 +36,45 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
     },
   },
+  link: {
+    color: 'white',
+    '&:visited': {
+      color: '#fcdfd8',
+    },
+  },
+  submitButton: {
+    height: '45px',
+  },
 }));
 
+const LOGIN_USER = gql`
+mutation login($username: String!,
+  $password: String!) {
+  login(username: $username,
+    password: $password) {
+        userid,
+        username
+  }
+}
+`;
+
 interface ILogin {
-  email: string;
+  username: string;
   password: string;
 }
 
 interface ILoginError {
-  email?: string;
+  username?: string;
   password?: string;
 }
 
-const initialValues:ILogin = { email: '', password: '' };
+const initialValues:ILogin = { username: '', password: '' };
 const validate = (values:ILogin) => {
   const errors:ILoginError = {};
-  if (!values.email) {
-    errors.email = 'Your email is required';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address';
+  if (!values.username) {
+    errors.username = 'Your username is required';
+  } else if (values.username.length === 0) {
+    errors.username = 'Invalid username';
   }
 
   if (!values.password) {
@@ -61,13 +88,38 @@ const validate = (values:ILogin) => {
 
 export default function Login(): ReactElement {
   const classes = useStyles();
+  const [login, { data, error }] = useMutation(LOGIN_USER);
+  console.log(data, error);
   const formik = useFormik({
     initialValues,
     validate,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await login({
+        variables: {
+          username: values.username,
+          password: values.password,
+        },
+      });
     },
   });
+
+  let errorMessage:string|ReactElement|undefined = error?.message;
+  console.log(errorMessage);
+  if (errorMessage === 'Username not unique.') {
+    errorMessage = (
+      <>
+        This username does not exist —
+        {' '}
+        <strong>
+          Did you want to
+          {' '}
+          <Link to="/sign-up" className={classes.link}>sign up</Link>
+          ?
+        </strong>
+      </>
+    );
+  }
 
   return (
     <Container
@@ -80,21 +132,31 @@ export default function Login(): ReactElement {
         >
           <b>Log In</b>
         </Typography>
+        <Fade
+          in={Boolean(errorMessage)}
+          timeout={1000}
+        >
+          <Alert
+            severity="error"
+            className={classes.alertContainer}
+          >
+            <AlertTitle>Uh oh!</AlertTitle>
+            {errorMessage}
+          </Alert>
+        </Fade>
         <form
           className={classes.form}
           onSubmit={formik.handleSubmit}
         >
           <TextField
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-            label="Email"
-            name="email"
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+            label="Username"
+            name="username"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.email}
+            value={formik.values.username}
             variant="outlined"
-            type="email"
-            autoComplete="email"
             required
             fullWidth
             disabled={formik.isSubmitting}
@@ -117,14 +179,17 @@ export default function Login(): ReactElement {
           <Button
             type="submit"
             variant="contained"
-            disabled={!formik.isValid}
+            color="secondary"
+            disabled={!formik.dirty}
+            className={classes.submitButton}
+            fullWidth
           >
-            Log In
+            {formik.isSubmitting ? <CircularProgress size="20px" color="primary" /> : 'Log In'}
           </Button>
           <FormHelperText>
             Don&quot;t have an account? Sign up
             {' '}
-            <Link to="/sign-up">here</Link>
+            <Link to="/sign-up" className={classes.link}>here</Link>
             .
           </FormHelperText>
         </form>

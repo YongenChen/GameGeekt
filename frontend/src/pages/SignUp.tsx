@@ -1,10 +1,11 @@
 import React, { ReactElement } from 'react';
 import {
-  Container, makeStyles, Typography, TextField, Button, FormHelperText,
+  Container, makeStyles, Typography, TextField, Button, FormHelperText, Fade, CircularProgress,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
+import { AlertTitle, Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -18,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: theme.spacing(3),
   },
+  alertContainer: {
+    textAlign: 'left',
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+  },
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -29,6 +35,15 @@ const useStyles = makeStyles((theme) => ({
     '& > *:last-child': {
       margin: 0,
     },
+  },
+  link: {
+    color: 'white',
+    '&:visited': {
+      color: '#fcdfd8',
+    },
+  },
+  submitButton: {
+    height: '45px',
   },
 }));
 
@@ -97,12 +112,13 @@ const validate = (values:ISignUp) => {
 
 export default function SignUp(): ReactElement {
   const classes = useStyles();
-  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
-  console.log(data, loading, error);
+  const [registerUser, { data, error }] = useMutation(REGISTER_USER);
+  console.log(data, error);
   const formik = useFormik({
     initialValues,
     validate,
     onSubmit: async (values) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       await registerUser({
         variables: {
           username: values.username,
@@ -114,6 +130,21 @@ export default function SignUp(): ReactElement {
     },
   });
 
+  let errorMessage:string|ReactElement|undefined = error?.message;
+  if (errorMessage === 'Username not unique.') {
+    errorMessage = (
+      <>
+        This username already exists —
+        {' '}
+        <strong>
+          Did you want to
+          {' '}
+          <Link to="/login" className={classes.link}>log in</Link>
+          ?
+        </strong>
+      </>
+    );
+  }
   return (
     <Container
       className={classes.rootContainer}
@@ -125,6 +156,18 @@ export default function SignUp(): ReactElement {
         >
           <b>Sign Up</b>
         </Typography>
+        <Fade
+          in={Boolean(errorMessage)}
+          timeout={1000}
+        >
+          <Alert
+            severity="error"
+            className={classes.alertContainer}
+          >
+            <AlertTitle>Uh oh!</AlertTitle>
+            {errorMessage}
+          </Alert>
+        </Fade>
         <div className={classes.form}>
           <TextField
             error={formik.touched.username && Boolean(formik.errors.username)}
@@ -190,14 +233,17 @@ export default function SignUp(): ReactElement {
             }}
             type="button"
             variant="contained"
-            disabled={!formik.isValid}
+            color="secondary"
+            disabled={!formik.dirty}
+            className={classes.submitButton}
+            fullWidth
           >
-            Sign Up
+            {formik.isSubmitting ? <CircularProgress size="20px" color="primary" /> : 'Sign Up'}
           </Button>
           <FormHelperText>
             Have an account? Sign in
             {' '}
-            <Link to="/login">here</Link>
+            <Link to="/login" className={classes.link}>here</Link>
             .
           </FormHelperText>
         </div>

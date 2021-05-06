@@ -44,8 +44,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-console.log(process.env.REACT_APP_GRAPHQL_SERVER_URL);
-
 const createDarkTheme = () => createMuiTheme({
   palette: {
     type: 'dark',
