@@ -4,7 +4,6 @@ import {
   IconButton,
   Typography,
   InputBase,
-  Button,
   Grid,
   InputAdornment,
 } from '@material-ui/core';
@@ -20,6 +19,7 @@ import {
 } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import Drawer from './Drawer';
+import AuthAction from './AuthAction';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   // appBar: {
@@ -150,27 +150,11 @@ export default function AppBar({ getGlobalTheme }: Props): ReactElement {
             />
           </Grid>
           <Grid item xs className={classes.actionContainer}>
-            <Button
-              variant="outlined"
-              className={classes.loginButton}
-              component={Link}
-              to="/login"
-            >
-              Log In
-            </Button>
-            <Button
-              variant="contained"
-              className={classes.signUpButton}
-              component={Link}
-              to="/sign-up"
-            >
-              Sign Up
-            </Button>
+            <AuthAction />
           </Grid>
         </Grid>
 
         {/* <div className={classes.fillGap} /> */}
-
       </Toolbar>
     </MUIAppBar>
   );
