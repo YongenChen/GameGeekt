@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import {
   Container, makeStyles, Typography, TextField, Button, FormHelperText, Fade, CircularProgress,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { AlertTitle, Alert } from '@material-ui/lab';
 import { gql, useMutation } from '@apollo/client';
@@ -88,19 +88,40 @@ const validate = (values:ILogin) => {
 
 export default function Login(): ReactElement {
   const classes = useStyles();
-  const [login, { data, error }] = useMutation(LOGIN_USER);
-  console.log(data, error);
+  const history = useHistory();
+  const [login, { error }] = useMutation(LOGIN_USER, {
+    update: (cache, { data }) => {
+      cache.writeQuery({
+        query: gql`
+        query returnCurrentUser {
+          currentUser {
+            username,
+            userid
+          }
+        }
+        `,
+        data: {
+          __typename: 'Query',
+          currentUser: data?.login,
+        },
+      });
+    },
+  });
+
   const formik = useFormik({
     initialValues,
     validate,
     onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      await login({
+      const response = await login({
         variables: {
           username: values.username,
           password: values.password,
         },
       });
+      if (response.data) {
+        history.push('/');
+      }
     },
   });
 

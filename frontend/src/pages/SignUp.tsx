@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import {
   Container, makeStyles, Typography, TextField, Button, FormHelperText, Fade, CircularProgress,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import { AlertTitle, Alert } from '@material-ui/lab';
@@ -112,14 +112,31 @@ const validate = (values:ISignUp) => {
 
 export default function SignUp(): ReactElement {
   const classes = useStyles();
-  const [registerUser, { data, error }] = useMutation(REGISTER_USER);
-  console.log(data, error);
+  const history = useHistory();
+  const [registerUser, { error }] = useMutation(REGISTER_USER, {
+    update: (cache, { data }) => {
+      cache.writeQuery({
+        query: gql`
+        query returnCurrentUser {
+          currentUser {
+            username,
+            userid
+          }
+        }
+        `,
+        data: {
+          __typename: 'Query',
+          currentUser: data?.registerUser,
+        },
+      });
+    },
+  });
   const formik = useFormik({
     initialValues,
     validate,
     onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      await registerUser({
+      const response = await registerUser({
         variables: {
           username: values.username,
           email: values.email,
@@ -127,6 +144,9 @@ export default function SignUp(): ReactElement {
           confirmPassword: values.confirmPassword,
         },
       });
+      if (response.data) {
+        history.push('/');
+      }
     },
   });
 
