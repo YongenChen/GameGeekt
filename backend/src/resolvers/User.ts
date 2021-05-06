@@ -53,7 +53,7 @@ const passwordMismatchError = new UserInputError('Password mismatch');
 @Resolver()
 export default class UserResolver {
   @Query(() => User, { nullable: true })
-  async me(
+  async currentUser(
     @Ctx() { req }: Context,
   ) : Promise<User|null> {
     const id = req.session.userId;
