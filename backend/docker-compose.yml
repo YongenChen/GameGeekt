@@ -24,29 +24,29 @@ services:
       - "6379:6379"
     networks:
       - app-network
-  server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: server
-    container_name: server
-    restart: unless-stopped
-    ports:
-      - "9090:9090"
-    volumes:
-      - .:/app
-      - node_modules:/node_modules
-    environment:
-      dbhost: db
-      dbport: 3306
-      dbusername: admin
-      dbpassword: gamegeekt
-      dbname: GameGeekt_Database
-      redishost: redis
-      origin: "localhost:3000"
-    command: node app.js
-    networks:
-      - app-network
+  # server:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: server
+  #   container_name: server
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - .:/app
+  #     - node_modules:/node_modules
+  #   environment:
+  #     dbhost: db
+  #     dbport: 3306
+  #     dbusername: admin
+  #     dbpassword: gamegeekt
+  #     dbname: GameGeekt_Database
+  #     redishost: redis
+  #     origin: http://localhost:3000
+  #   command: node app.js
+  #   networks:
+  #     - app-network
 
 networks:
   app-network:
