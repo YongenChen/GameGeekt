@@ -11,6 +11,7 @@ import { createConnection } from 'typeorm';
 import { buildSchema } from 'type-graphql';
 import UserResolver from './resolvers/User';
 import GameResolver from './resolvers/Game';
+import ReviewResolver from './resolvers/Review';
 // import resolvers from './db_functions/resolvers';
 
 dotenv.config();
@@ -75,7 +76,7 @@ async function main() {
     database: process.env.dbname,
     entities: [path.join(__dirname, './entities/*')],
     logging: true,
-    dropSchema: true,
+    dropSchema: false,
     synchronize: true,
   });
 
@@ -109,7 +110,7 @@ async function main() {
   const server = new ApolloServer({
     debug: true,
     tracing: true,
-    schema: await buildSchema({ resolvers: [UserResolver, GameResolver] }),
+    schema: await buildSchema({ resolvers: [UserResolver, GameResolver, ReviewResolver] }),
     context({ res, req }) {
       return {
         req, res, redis: redisClient, connection,
