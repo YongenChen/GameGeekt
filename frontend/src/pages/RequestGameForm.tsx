@@ -96,7 +96,7 @@ const validate = (values:IRequestGame) => {
     errors.rating = 'Please enter a rating out of /5';
   } else if (values.rating.length === 0) {
     errors.rating = 'Please enter a digit between 0 to 5';
-  } else if (!/^[0-5]$/i.test(values.rating)) {
+  } else if (!/^([^0-5]*)$/.test(values.rating)) {
     errors.rating = 'Please enter a digit between 0 and 5';
   }
 
