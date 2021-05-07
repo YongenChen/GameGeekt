@@ -52,6 +52,10 @@ query getGameReviews($gameid: Int) {
   }
   `;
 
+// ADD A BUTTON CALLED "ADD REVIEW" and  dialog component (form) that allows you
+// to submit data to server with graphql
+
+// Make the dialog component first then embed it in button on click
 function GameReviewItem({
   gameReview: {
     reviewid, gameid, reviewerid, rating,
