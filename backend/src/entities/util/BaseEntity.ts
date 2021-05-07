@@ -1,4 +1,4 @@
-import { Field, InterfaceType } from 'type-graphql';
+import { Field, ID, InterfaceType } from 'type-graphql';
 import {
   BaseEntity as TypeOrmBaseEntity,
   PrimaryGeneratedColumn,
@@ -9,7 +9,7 @@ import {
 
 @InterfaceType()
 export default abstract class BaseEntity extends TypeOrmBaseEntity {
-    @Field()
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 

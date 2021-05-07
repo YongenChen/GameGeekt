@@ -86,6 +86,7 @@ async function main() {
   });
 
   app.listen({ port: 9090 });
+  // eslint-disable-next-line no-console
   console.log(`🚀 Server ready at http://localhost:9090${server.graphqlPath}`);
 }
 
