@@ -15,6 +15,9 @@ class CreateGameInput {
 
   @Field()
   description: string
+
+  @Field({ nullable: true })
+  imgLink?: string
 }
 
 @Resolver()
@@ -65,7 +68,7 @@ export default class GameResolver {
   async createGame(@Arg('options') options: CreateGameInput) : Promise<Game|null> {
     if (await Game.findOne({ name: options.name })) throw new UserInputError('Game name taken');
     const game = Game.create({
-      name: options.name, genre: options.genre, description: options.description,
+      name: options.name, genre: options.genre, description: options.description, imgLink: options.imgLink,
     });
     await game.save();
     return game;

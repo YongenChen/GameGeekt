@@ -5,6 +5,7 @@ import Review from './Review';
 
 @ObjectType({ implements: BaseEntity })
 @Entity()
+
 export default class Game extends BaseEntity {
     id: number;
 
@@ -20,7 +21,22 @@ export default class Game extends BaseEntity {
 
     @Field()
     @Column({
-      type: 'varchar', unique: false, length: 3000, default: 'No Genre',
+      type: 'enum',
+      unique: false,
+      enum: {
+        ADVENTURE: 'Adventure',
+        COMBAT: 'Combat',
+        FPS: 'First_Person_Shooter',
+        MMO: 'Massively_Multiplayer_Online',
+        MOBILE: 'Mobile',
+        MOBA: 'Multiplayer_Online_Battle_Arena',
+        PUZZLE: 'Puzzle',
+        RTS: 'Real_Time_Strategy',
+        RP: 'Role_Playing',
+        SIMULATION: 'Simulation',
+        SPORTS: 'Sports',
+        STEALTHSHOOTER: 'Stealth_Shooter',
+      },
     })
     genre: string;
 
@@ -28,11 +44,11 @@ export default class Game extends BaseEntity {
     @Column({ type: 'varchar', unique: false, length: 3000 })
     description: string;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({
-      type: 'varchar', unique: false, length: 3000, default: '',
+      type: 'varchar', unique: false, length: 3000, default: '', nullable: true,
     })
-    imglink: string;
+    imgLink: string;
 
     @Field(() => [Review])
     @OneToMany(() => Review, (review) => review.game, { lazy: true })
