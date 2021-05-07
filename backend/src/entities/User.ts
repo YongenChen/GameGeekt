@@ -1,7 +1,8 @@
 import { IsEmail } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import BaseEntity from './util/BaseEntity';
+import Review from './Review';
 
 @ObjectType({ implements: BaseEntity })
 @Entity()
@@ -26,4 +27,8 @@ export default class User extends BaseEntity {
     @IsEmail()
     @Column({ type: 'varchar', unique: false, default: '' })
     email: string;
+
+    @Field(() => [Review])
+    @OneToMany(() => Review, (review) => review.reviewer, { lazy: true })
+    reviews: Review[];
 }
