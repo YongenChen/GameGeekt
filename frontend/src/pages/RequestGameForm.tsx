@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   alertContainer: {
     textAlign: 'left',
+    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
   },
   form: {
