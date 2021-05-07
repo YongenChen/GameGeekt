@@ -3,15 +3,15 @@ import {
   Arg, Field, InputType, Int, Mutation, Query, Resolver,
 } from 'type-graphql';
 import { Like } from 'typeorm';
-import Game from '../entities/Game';
+import Game, { Genres } from '../entities/Game';
 
 @InputType()
 class CreateGameInput {
   @Field()
   name: string
 
-  @Field()
-  genre: string
+  @Field(() => Genres)
+  genre: Genres
 
   @Field()
   description: string

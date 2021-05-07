@@ -1,11 +1,31 @@
+/* eslint-disable no-unused-vars */
 import { Field, ObjectType } from 'type-graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
+import { registerEnumType } from 'type-graphql';
 import BaseEntity from './util/BaseEntity';
 import Review from './Review';
 
+// eslint-disable-next-line no-shadow
+export enum Genres {
+  ADVENTURE = 'Adventure',
+  FPS = 'First_Person_Shooter',
+  MMO = 'Massively_Multiplayer_Online',
+  MOBILE = 'Mobile',
+  MOBA = 'Multiplayer_Online_Battle_Arena',
+  PUZZLE = 'Puzzle',
+  RTS = 'Real_Time_Strategy',
+  RP = 'Role_Playing',
+  SIMULATION = 'Simulation',
+  SPORTS = 'Sports',
+}
+
+registerEnumType(Genres, {
+  name: 'Genre', // this one is mandatory
+  description: 'List of possible genres', // this one is optional
+});
+
 @ObjectType({ implements: BaseEntity })
 @Entity()
-
 export default class Game extends BaseEntity {
     id: number;
 
@@ -19,26 +39,13 @@ export default class Game extends BaseEntity {
     @Column({ type: 'varchar', unique: true })
     name: string;
 
-    @Field()
+    @Field(() => Genres)
     @Column({
       type: 'enum',
       unique: false,
-      enum: {
-        ADVENTURE: 'Adventure',
-        COMBAT: 'Combat',
-        FPS: 'First_Person_Shooter',
-        MMO: 'Massively_Multiplayer_Online',
-        MOBILE: 'Mobile',
-        MOBA: 'Multiplayer_Online_Battle_Arena',
-        PUZZLE: 'Puzzle',
-        RTS: 'Real_Time_Strategy',
-        RP: 'Role_Playing',
-        SIMULATION: 'Simulation',
-        SPORTS: 'Sports',
-        STEALTHSHOOTER: 'Stealth_Shooter',
-      },
+      enum: Genres,
     })
-    genre: string;
+    genre: Genres;
 
     @Field()
     @Column({ type: 'varchar', unique: false, length: 3000 })
