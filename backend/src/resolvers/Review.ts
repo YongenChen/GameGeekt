@@ -21,6 +21,24 @@ class CreateReviewInput {
   gameid: number
 }
 
+@InputType()
+class UpdateReviewInput {
+  @Field()
+  id: number
+
+  @Field()
+  rating: number
+
+  @Field()
+  reviewbody: string
+
+  @Field()
+  userid: number
+
+  @Field()
+  gameid: number
+}
+
 @Resolver()
 export default class ReviewResolver {
   @Query(() => Review)
@@ -42,5 +60,27 @@ export default class ReviewResolver {
     });
     await review.save();
     return review;
+  }
+
+  @Mutation(() => Review)
+  async updateReview(@Arg('options') options: UpdateReviewInput) : Promise<Review|null> {
+    const review = Review.create({
+      id: options.id,
+      rating: options.rating,
+      reviewbody: options.reviewbody,
+      reviewer: await User.findOneOrFail(options.userid),
+      game: await Game.findOneOrFail(options.gameid),
+    });
+    await review.save();
+    return review;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteReview(@Arg('id', () => Int) id: number) : Promise<boolean> {
+    if (await Review.findOne(id) == null) {
+      return false;
+    }
+    await Review.delete(id);
+    return true;
   }
 }

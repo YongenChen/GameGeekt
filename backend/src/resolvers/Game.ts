@@ -52,6 +52,15 @@ export default class GameResolver {
     return Game.find({ where: { genre: Like(`%${name}%`) } });
   }
 
+  @Query(() => Game)
+  async searchGameByTitle(@Arg('name', () => String) name: string) : Promise<Game|null> {
+    if (!name) {
+      throw new UserInputError('Genre is required.');
+    }
+
+    return Game.findOneOrFail({ where: { genre: Like(`%${name}%`) } });
+  }
+
   @Mutation(() => Game)
   async createGame(@Arg('options') options: CreateGameInput) : Promise<Game|null> {
     if (await Game.findOne({ name: options.name })) throw new UserInputError('Game name taken');

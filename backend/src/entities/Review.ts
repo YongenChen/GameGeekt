@@ -16,7 +16,7 @@ export default class Review extends BaseEntity {
     deletedAt?: Date;
 
     @Field()
-    @Column({ type: 'float', unique: true })
+    @Column({ type: 'float', unique: false })
     rating: number;
 
     @Field()
