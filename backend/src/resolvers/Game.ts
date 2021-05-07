@@ -38,7 +38,7 @@ export default class GameResolver {
   }
 
   @Query(() => [Game])
-  async searchGamesByGenre(@Arg('genre', () => String) genre: string) : Promise<Game[]> {
+  async searchGamesByGenre(@Arg('genre', () => Genres) genre: Genres) : Promise<Game[]> {
     if (!genre) {
       throw new UserInputError('Genre is required.');
     }
