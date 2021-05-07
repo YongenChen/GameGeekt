@@ -47,6 +47,8 @@ async function main() {
       origin: process.env.origin,
       credentials: true, // <-- REQUIRED backend setting
     }),
+  );
+  app.use(
     session({
       store: new RedisStore({
         client: redisClient,
