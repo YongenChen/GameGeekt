@@ -1,6 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import BaseEntity from './util/BaseEntity';
+import Review from './Review';
 
 @ObjectType({ implements: BaseEntity })
 @Entity()
@@ -32,4 +33,8 @@ export default class Game extends BaseEntity {
       type: 'varchar', unique: false, length: 3000, default: '',
     })
     imglink: string;
+
+    @Field(() => [Review])
+    @OneToMany(() => Review, (review) => review.game, { lazy: true })
+    reviews: Review[];
 }
