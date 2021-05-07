@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { registerEnumType } from 'type-graphql';
 import BaseEntity from './util/BaseEntity';
 import Review from './Review';
 
