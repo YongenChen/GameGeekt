@@ -83,20 +83,20 @@ const CURRENT_USER = gql`
 query returnCurrentUser {
   currentUser {
     username,
-    userid
+    id
   }
 }
 `;
 
-const LOGOUT_USER = gql`
-mutation logout {
-    logout
+const SIGNOUT_USER = gql`
+mutation signOut {
+    signOut
 }
 `;
 
 interface ICurrentUser {
     username: string;
-    userid: string;
+    id: string;
 }
 
 interface IResult {
@@ -106,14 +106,14 @@ interface IResult {
 export default function AuthAction() {
   const classes = useStyles();
   const { data } = useQuery<IResult>(CURRENT_USER);
-  const [logout] = useMutation(LOGOUT_USER, {
+  const [signOut] = useMutation(SIGNOUT_USER, {
     update: (cache) => {
       cache.writeQuery({
         query: gql`
           query returnCurrentUser {
             currentUser {
               username,
-              userid
+              id
             }
           }
           `,
@@ -135,7 +135,7 @@ export default function AuthAction() {
             component={Link}
             to="/"
             onClick={async () => {
-              await logout();
+              await signOut();
               await apolloClient.resetStore();
               window.location.reload();
             }}

@@ -48,12 +48,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LOGIN_USER = gql`
-mutation login($username: String!,
+const SIGNIN_USER = gql`
+mutation signIn($username: String!,
   $password: String!) {
-  login(username: $username,
-    password: $password) {
-        userid,
+  signIn(options: {
+    username: $username,
+    password: $password
+  }) {
+        id,
         username
   }
 }
@@ -90,20 +92,20 @@ const validate = (values:ILogin) => {
 export default function Login(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
-  const [login, { error }] = useMutation(LOGIN_USER, {
+  const [signIn, { error }] = useMutation(SIGNIN_USER, {
     update: (cache, { data }) => {
       cache.writeQuery({
         query: gql`
         query returnCurrentUser {
           currentUser {
             username,
-            userid
+            id
           }
         }
         `,
         data: {
           __typename: 'Query',
-          currentUser: data?.login,
+          currentUser: data?.signIn,
         },
       });
     },
@@ -114,7 +116,7 @@ export default function Login(): ReactElement {
     validate,
     onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await login({
+      const response = await signIn({
         variables: {
           username: values.username,
           password: values.password,

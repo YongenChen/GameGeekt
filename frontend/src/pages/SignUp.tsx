@@ -53,11 +53,13 @@ mutation registerUser($username: String!,
   $email: String!,
   $password: String!,
   $confirmPassword: String!) {
-  registerUser(username: $username,
+  register(options: {
+    username: $username,
     email: $email,
     password: $password,
-    confirmPassword: $confirmPassword) {
-        userid,
+    confirmPassword: $confirmPassword
+  }) {
+        id,
         username
   }
 }
@@ -121,13 +123,13 @@ export default function SignUp(): ReactElement {
         query returnCurrentUser {
           currentUser {
             username,
-            userid
+            id
           }
         }
         `,
         data: {
           __typename: 'Query',
-          currentUser: data?.registerUser,
+          currentUser: data?.register,
         },
       });
     },

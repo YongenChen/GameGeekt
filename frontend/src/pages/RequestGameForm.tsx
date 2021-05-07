@@ -1,11 +1,23 @@
 import React, { ReactElement } from 'react';
 import {
-  Container, makeStyles, Typography, TextField, Button, CircularProgress, FormHelperText, Fade,
+  Container,
+  makeStyles,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  FormHelperText,
+  Fade,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router';
 import { AlertTitle, Alert } from '@material-ui/lab';
+import { Genres } from '../utils/enums';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -36,50 +48,58 @@ const useStyles = makeStyles((theme) => ({
       margin: 0,
     },
   },
+  genreContainer: {
+    width: '100%',
+    textAlign: 'left',
+  },
   submitButton: {
     height: '45px',
   },
 }));
 
-const ADD_GAME = gql`
-mutation addGame($name: String!,
-  $genre: String!,
-  $rating: String!,
+const CREATE_GAME = gql`
+mutation createGame(
+  $name: String!,
+  $genre: Genre!,
   $description: String!,
-  $imglink: String!) {
-  addGame(name: $name,
-    genre: $genre,
-    rating: $rating,
-    description: $description,
-    imglink: $imglink) {
-        gameid,
-        name
+  $imgLink: String) {
+    createGame(
+      options: {
+        name: $name,
+        genre: $genre,
+        description: $description,
+        imgLink: $imgLink
+      }) {
+          id,
+          createdAt,
+          updatedAt,
+          deletedAt,
+          name,
+          genre,
+          description
   }
 }
 `;
 
 interface IRequestGame {
   name: string;
-  genre: string;
-  rating: string;
+  genre: Genres;
   description: string;
-  imglink: string;
+  imgLink?: string;
 }
 
 interface IRequestGameError {
   name?: string;
   genre?: string;
-  rating?: string;
   description?: string;
-  imglink?: string;
+  imgLink?: string;
 }
 
 const initialValues:IRequestGame = {
   name: '',
-  genre: '',
-  rating: '',
+  genre: Genres.ADVENTURE,
   description: '',
-  imglink: '',
+  imgLink: '',
 };
 
 const validate = (values:IRequestGame) => {
@@ -90,10 +110,8 @@ const validate = (values:IRequestGame) => {
 
   if (!values.genre) {
     errors.genre = 'Please enter a game genre';
-  }
-
-  if (!values.rating) {
-    errors.rating = 'Please enter a rating out of /5';
+  } else if (!(values.genre in Genres)) {
+    errors.genre = 'Invalid genre';
   }
 
   if (!values.description) {
@@ -103,40 +121,75 @@ const validate = (values:IRequestGame) => {
   return errors;
 };
 
+interface Genre {
+  label: string;
+  value: Genres;
+}
+
+const genreList: Genre[] = [
+  {
+    label: 'Adventure',
+    value: Genres.ADVENTURE,
+  },
+  {
+    label: 'First Person Shooter',
+    value: Genres.FPS,
+  },
+  {
+    label: 'Massively Multiplayer Online',
+    value: Genres.MMO,
+  },
+  {
+    label: 'Mobile Games',
+    value: Genres.MOBILE,
+  },
+  {
+    label: 'Multiplayer Online Battle Arena',
+    value: Genres.MOBA,
+  },
+  {
+    label: 'Puzzle',
+    value: Genres.PUZZLE,
+  },
+  {
+    label: 'Real-Time Strategy',
+    value: Genres.RTS,
+  },
+  {
+    label: 'Role-Playing',
+    value: Genres.RP,
+  },
+  {
+    label: 'Simulation',
+    value: Genres.SIMULATION,
+  },
+  {
+    label: 'Sports',
+    value: Genres.SPORTS,
+  },
+];
+
 export default function RequestGameForm(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
-  const [addGame, { error }] = useMutation(ADD_GAME, {
-    update: (cache, { data }) => {
-      cache.writeQuery({
-        query: gql`
-        query returnGame {
-          game {
-              gameid,
-              name,
-          }
-        }
-        `,
-        data: {
-          __typename: 'Query',
-          game: data?.addGame,
-        },
-      });
-    },
-  });
+  const [createGame, { error }] = useMutation(CREATE_GAME);
 
   const formik = useFormik({
     initialValues,
     validate,
-    onSubmit: async (values) => {
+    onSubmit: async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await addGame({
+      const response = await createGame({
         variables: {
-          name: values.name,
-          genre: values.genre,
-          rating: values.rating,
-          description: values.description,
-          imglink: values.imglink,
+          name: 'aoej3',
+          genre: `${Genres.MMO}`,
+          description: 'Fighting',
+          imgLink: '',
+
+          // name: values.name,
+          // genre: values.genre,
+          // description: values.description,
+          // imgLink: values.imgLink,
         },
       });
       if (response.data) {
@@ -149,12 +202,13 @@ export default function RequestGameForm(): ReactElement {
   if (errorMessage === 'Game is not unique.') {
     errorMessage = (
       <>
-        This game already exists —
+        This game already exists
         {' '}
       </>
     );
   }
 
+  console.log(errorMessage);
   return (
     <Container
       className={classes.rootContainer}
@@ -192,7 +246,31 @@ export default function RequestGameForm(): ReactElement {
             fullWidth
             disabled={formik.isSubmitting}
           />
-          <TextField
+          <FormControl
+            variant="outlined"
+            className={classes.genreContainer}
+            error={formik.touched.genre && Boolean(formik.errors.genre)}
+            disabled={formik.isSubmitting}
+            fullWidth
+            required
+          >
+            <InputLabel>Genre</InputLabel>
+            <Select
+              value={formik.values.genre}
+              onChange={formik.handleChange}
+              label="Genre"
+              name="genre"
+              onBlur={formik.handleBlur}
+            >
+              {genreList.map((genre) => (
+                <MenuItem key={genre.value} value={genre.value}>
+                  {genre.label}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>{formik.touched.genre && formik.errors.genre}</FormHelperText>
+          </FormControl>
+          {/* <TextField
             error={formik.touched.genre && Boolean(formik.errors.genre)}
             helperText={formik.touched.genre && formik.errors.genre}
             label="Game Genre"
@@ -204,20 +282,7 @@ export default function RequestGameForm(): ReactElement {
             required
             fullWidth
             disabled={formik.isSubmitting}
-          />
-          <TextField
-            error={formik.touched.rating && Boolean(formik.errors.rating)}
-            helperText={formik.touched.rating && formik.errors.rating}
-            label="Rating out of /5"
-            name="rating"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.rating}
-            variant="outlined"
-            required
-            fullWidth
-            disabled={formik.isSubmitting}
-          />
+          /> */}
           <TextField
             error={formik.touched.description && Boolean(formik.errors.description)}
             helperText={formik.touched.description && formik.errors.description}
@@ -234,15 +299,14 @@ export default function RequestGameForm(): ReactElement {
             disabled={formik.isSubmitting}
           />
           <TextField
-            error={formik.touched.imglink && Boolean(formik.errors.imglink)}
-            helperText={formik.touched.imglink && formik.errors.imglink}
+            error={formik.touched.imgLink && Boolean(formik.errors.imgLink)}
+            helperText={formik.touched.imgLink && formik.errors.imgLink}
             label="Link Image of Game (Optional)"
             name="imglink"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.imglink}
+            value={formik.values.imgLink}
             variant="outlined"
-            required
             fullWidth
             disabled={formik.isSubmitting}
           />
