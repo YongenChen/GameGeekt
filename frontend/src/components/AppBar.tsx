@@ -144,7 +144,11 @@ export default function AppBar({ getGlobalTheme }: Props): ReactElement {
           </Grid>
           <Grid item xs={6} className={classes.searchContainer}>
             <InputBase
-              startAdornment={<InputAdornment position="start"><SearchIcon className={classes.searchIcon} /></InputAdornment>}
+              startAdornment={(
+                <InputAdornment position="start">
+                  <SearchIcon className={classes.searchIcon} />
+                </InputAdornment>
+            )}
               className={classes.inputInput}
               placeholder="Search for a game..."
             />

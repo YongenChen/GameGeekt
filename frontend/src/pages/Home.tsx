@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid, Container, Typography, Box,
 } from '@material-ui/core';
+import { Timeline } from 'react-twitter-widgets';
 import Slideshow from '../components/Slideshow';
 import Slider from '../components/Slider';
 
@@ -16,8 +17,15 @@ const useStyles = makeStyles(() => ({
   headerText: {
     paddingLeft: '127px',
     paddingTop: '30px',
+    paddingBottom: '1px',
+    fontFamily: "'Bebas Neue', Roboto",
+  },
+  twitterHeaderText: {
+    paddingLeft: '25px',
+    paddingTop: '30px',
     paddingBottom: '15px',
     fontFamily: "'Bebas Neue', Roboto",
+    fontSize: '29pt',
   },
   genreText: {
     display: 'flex',
@@ -51,9 +59,21 @@ export default function Home(): ReactElement {
         </Grid>
         <Grid item xs={12} sm={5}>
           <Box>
-            <Typography variant="h5" className={classes.headerText}>
-              This Week&apos;s Featured Gaming News
+            <Typography className={classes.twitterHeaderText}>
+              This Week&apos;s Featured Gaming Deals
             </Typography>
+            <Timeline
+              dataSource={{
+                sourceType: 'profile',
+                screenName: 'Steam',
+              }}
+              options={{
+                theme: 'light',
+                height: '400',
+                width: '500',
+                borderColor: 'secondary',
+              }}
+            />
           </Box>
         </Grid>
       </Grid>

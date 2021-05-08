@@ -5,7 +5,9 @@ import {
 import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
-import { AlertTitle, Alert } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -52,11 +54,13 @@ mutation registerUser($username: String!,
   $email: String!,
   $password: String!,
   $confirmPassword: String!) {
-  registerUser(username: $username,
+  register(options: {
+    username: $username,
     email: $email,
     password: $password,
-    confirmPassword: $confirmPassword) {
-        userid,
+    confirmPassword: $confirmPassword
+  }) {
+        id,
         username
   }
 }
@@ -113,6 +117,7 @@ const validate = (values:ISignUp) => {
 export default function SignUp(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [registerUser, { error }] = useMutation(REGISTER_USER, {
     update: (cache, { data }) => {
       cache.writeQuery({
@@ -120,13 +125,13 @@ export default function SignUp(): ReactElement {
         query returnCurrentUser {
           currentUser {
             username,
-            userid
+            id
           }
         }
         `,
         data: {
           __typename: 'Query',
-          currentUser: data?.registerUser,
+          currentUser: data?.register,
         },
       });
     },
@@ -145,6 +150,9 @@ export default function SignUp(): ReactElement {
         },
       });
       if (response.data) {
+        enqueueSnackbar('Successfully registered!', {
+          variant: 'success',
+        });
         history.push('/');
       }
     },
@@ -170,12 +178,6 @@ export default function SignUp(): ReactElement {
       className={classes.rootContainer}
     >
       <div>
-        <Typography
-          variant="h4"
-          className={classes.title}
-        >
-          <b>Sign Up</b>
-        </Typography>
         <Fade
           in={Boolean(errorMessage)}
           timeout={1000}
@@ -188,6 +190,12 @@ export default function SignUp(): ReactElement {
             {errorMessage}
           </Alert>
         </Fade>
+        <Typography
+          variant="h4"
+          className={classes.title}
+        >
+          <b>Sign Up</b>
+        </Typography>
         <div className={classes.form}>
           <TextField
             error={formik.touched.username && Boolean(formik.errors.username)}

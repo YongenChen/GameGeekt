@@ -4,8 +4,10 @@ import {
 } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { AlertTitle, Alert } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import { gql, useMutation } from '@apollo/client';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -47,12 +49,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LOGIN_USER = gql`
-mutation login($username: String!,
+const SIGNIN_USER = gql`
+mutation signIn($username: String!,
   $password: String!) {
-  login(username: $username,
-    password: $password) {
-        userid,
+  signIn(options: {
+    username: $username,
+    password: $password
+  }) {
+        id,
         username
   }
 }
@@ -89,20 +93,21 @@ const validate = (values:ILogin) => {
 export default function Login(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
-  const [login, { error }] = useMutation(LOGIN_USER, {
+  const { enqueueSnackbar } = useSnackbar();
+  const [signIn, { error }] = useMutation(SIGNIN_USER, {
     update: (cache, { data }) => {
       cache.writeQuery({
         query: gql`
         query returnCurrentUser {
           currentUser {
             username,
-            userid
+            id
           }
         }
         `,
         data: {
           __typename: 'Query',
-          currentUser: data?.login,
+          currentUser: data?.signIn,
         },
       });
     },
@@ -113,20 +118,22 @@ export default function Login(): ReactElement {
     validate,
     onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await login({
+      const response = await signIn({
         variables: {
           username: values.username,
           password: values.password,
         },
       });
       if (response.data) {
+        enqueueSnackbar('Successfully logged in!', {
+          variant: 'success',
+        });
         history.push('/');
       }
     },
   });
 
   let errorMessage:string|ReactElement|undefined = error?.message;
-  console.log(errorMessage);
   if (errorMessage === 'Username not unique.') {
     errorMessage = (
       <>
@@ -147,12 +154,6 @@ export default function Login(): ReactElement {
       className={classes.rootContainer}
     >
       <div>
-        <Typography
-          variant="h4"
-          className={classes.title}
-        >
-          <b>Log In</b>
-        </Typography>
         <Fade
           in={Boolean(errorMessage)}
           timeout={1000}
@@ -165,6 +166,12 @@ export default function Login(): ReactElement {
             {errorMessage}
           </Alert>
         </Fade>
+        <Typography
+          variant="h4"
+          className={classes.title}
+        >
+          <b>Log In</b>
+        </Typography>
         <form
           className={classes.form}
           onSubmit={formik.handleSubmit}

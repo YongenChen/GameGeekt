@@ -14,7 +14,6 @@ const useStyles = makeStyles(() => createStyles({
   },
   mainFooterStyle: {
     color: 'white',
-
     width: '100%',
     height: '100px',
   },
@@ -23,6 +22,7 @@ const useStyles = makeStyles(() => createStyles({
     flexDirection: 'column',
     minHeight: '1vh',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   link: {
     textDecoration: 'none',
@@ -37,8 +37,8 @@ function Footer(): ReactElement {
   return (
     <div className={classes.container}>
       <Container maxWidth="lg">
-        <Grid container spacing={3} className={classes.mainFooterStyle}>
-          <Grid item xs={4} sm={4} lg={4} className={classes.gridStyle}>
+        <Grid container spacing={4} className={classes.mainFooterStyle}>
+          <Grid item xs={3} sm={3} lg={4} className={classes.gridStyle}>
             <ul className={classes.listItemStyle}>
               <li>
                 <Typography
@@ -52,7 +52,7 @@ function Footer(): ReactElement {
               </li>
             </ul>
           </Grid>
-          <Grid item xs={3} sm={3} lg={4}>
+          <Grid item xs={3} sm={3} lg={4} className={classes.gridStyle}>
             <ul className={classes.listItemStyle}>
               <li>
                 <Typography
@@ -66,7 +66,7 @@ function Footer(): ReactElement {
               </li>
             </ul>
           </Grid>
-          <Grid item xs={3} sm={3} lg={4}>
+          <Grid item xs={3} sm={3} lg={4} className={classes.gridStyle}>
             <ul className={classes.listItemStyle}>
               <li>
                 <Typography

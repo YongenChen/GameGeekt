@@ -2,12 +2,9 @@ import {
   FormControlLabel,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText, Switch, Typography, Drawer as MUIDrawer, makeStyles, createStyles, Theme,
 } from '@material-ui/core';
 import React, { ReactElement, useState } from 'react';
-import { Computer as ComputerIcon } from '@material-ui/icons';
-import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 import { Link } from 'react-router-dom';
 
 interface Props {
@@ -33,6 +30,17 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   listTitle: {
     fontSize: theme.typography.h3.fontSize,
     fontFamily: "'Bebas Neue', Roboto",
+  },
+  lastItem: {
+    borderTop: '1px solid #FFFF',
+    borderBottom: '1px solid #FFFF',
+  },
+  listItemBorder: {
+    borderTop: '4px solid #FFFF',
+  },
+  listItemText: {
+    fontFamily: "'Play', Roboto",
+    textAlign: 'center',
   },
 }));
 
@@ -67,13 +75,13 @@ function Drawer({
             button
             component={Link}
             to="/first-person-shooter"
+            onClick={onClose}
+            className={classes.listItemBorder}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 First Person Shooter
               </Typography>
@@ -83,13 +91,12 @@ function Drawer({
             button
             component={Link}
             to="/multiplayer-online-battle-arena"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Multiplayer Online Battle Arena
               </Typography>
@@ -99,13 +106,12 @@ function Drawer({
             button
             component={Link}
             to="/massively-multiplayer-online"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Massively Multiplayer Online
               </Typography>
@@ -115,13 +121,12 @@ function Drawer({
             button
             component={Link}
             to="/simulation"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Simulation
               </Typography>
@@ -131,13 +136,12 @@ function Drawer({
             button
             component={Link}
             to="/adventure"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Adventure
               </Typography>
@@ -147,13 +151,12 @@ function Drawer({
             button
             component={Link}
             to="/real-time-strategy"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Real-Time Strategy
               </Typography>
@@ -163,13 +166,12 @@ function Drawer({
             button
             component={Link}
             to="/puzzle"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Puzzle
               </Typography>
@@ -179,13 +181,12 @@ function Drawer({
             button
             component={Link}
             to="/sports"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Sports
               </Typography>
@@ -195,13 +196,12 @@ function Drawer({
             button
             component={Link}
             to="/role-playing"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Role-Playing
               </Typography>
@@ -211,13 +211,12 @@ function Drawer({
             button
             component={Link}
             to="/mobile-games"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <ComputerIcon className={classes.computerIcon} />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Mobile Games
               </Typography>
@@ -227,13 +226,12 @@ function Drawer({
             button
             component={Link}
             to="/request-game-form"
+            onClick={onClose}
           >
-            <ListItemIcon>
-              <AddToQueueIcon />
-            </ListItemIcon>
-            <ListItemText>
+            <ListItemText className={classes.listItemText}>
               <Typography
                 variant="h6"
+                className={classes.listItemText}
               >
                 Request a game
               </Typography>

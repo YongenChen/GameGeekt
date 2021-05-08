@@ -12,15 +12,9 @@ import { Link } from 'react-router-dom';
 import {
   gql, useMutation, useQuery, useApolloClient,
 } from '@apollo/client';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-  // appBar: {
-  // backgroundColor: theme.palette.type === 'light' ?
-  // 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-  // backdropFilter: 'blur(3px)',
-  // boxShadow: `1px 1px 1px 0 ${theme.palette.type === 'light' ?
-  // 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)'}`,
-  // },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -30,8 +24,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     WebkitTextFillColor: 'transparent',
     WebkitTextStrokeWidth: '0.8px',
     WebkitTextStrokeColor: 'white',
-    //  color: theme.palette.type === 'light' ?
-    //  theme.palette.secondary.main : theme.palette.secondary.light,
     textDecoration: 'none',
     fontFamily: "'Press Start 2P', Roboto",
     fontSize: '35px',
@@ -83,20 +75,20 @@ const CURRENT_USER = gql`
 query returnCurrentUser {
   currentUser {
     username,
-    userid
+    id
   }
 }
 `;
 
-const LOGOUT_USER = gql`
-mutation logout {
-    logout
+const SIGNOUT_USER = gql`
+mutation signOut {
+    signOut
 }
 `;
 
 interface ICurrentUser {
     username: string;
-    userid: string;
+    id: string;
 }
 
 interface IResult {
@@ -105,15 +97,16 @@ interface IResult {
 
 export default function AuthAction() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { data } = useQuery<IResult>(CURRENT_USER);
-  const [logout] = useMutation(LOGOUT_USER, {
+  const [signOut] = useMutation(SIGNOUT_USER, {
     update: (cache) => {
       cache.writeQuery({
         query: gql`
           query returnCurrentUser {
             currentUser {
               username,
-              userid
+              id
             }
           }
           `,
@@ -135,9 +128,11 @@ export default function AuthAction() {
             component={Link}
             to="/"
             onClick={async () => {
-              await logout();
+              await signOut();
               await apolloClient.resetStore();
-              window.location.reload();
+              enqueueSnackbar('Successfully logged out!', {
+                variant: 'success',
+              });
             }}
           >
             Log Out
