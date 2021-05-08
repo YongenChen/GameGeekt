@@ -9,31 +9,34 @@ import CardMedia from '@material-ui/core/CardMedia';
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
+import { Genres } from '../utils/enums';
 
-interface gamesGenre {
-  gameid: number;
+interface IGame {
+  id: number;
   name: string;
-  genre: string;
+  genre: Genres;
   description: string;
-  imglink: string;
+  imgLink: string;
 }
 
-interface gamesData {
-  gamesGenre: gamesGenre[];
+interface IQuery {
+  searchGamesByGenre: IGame[];
 }
 
-interface gamesVar {
-  genre: string;
+interface IGameVar {
+  genre: Genres;
 }
 
 const GET_GAMES = gql`
-  query GetGames($genre: String){
-    gamesGenre(genre: $genre){
-      gameid,
+  query GetGames($genre: Genre!){
+    searchGamesByGenre(genre: $genre){
+      id,
       name,
       genre,
       description,
-      imglink
+      imgLink
     }
   }
   `;
@@ -76,31 +79,39 @@ const useStyles = makeStyles({
 
 export default function Sports(): ReactElement {
   const classes = useStyles();
-  const { loading, data } = useQuery<gamesData, gamesVar>(
-    GET_GAMES, { variables: { genre: 'Sports' } },
+  const { data, loading, error } = useQuery<IQuery, IGameVar>(
+    GET_GAMES, { variables: { genre: Genres.SPORTS } },
   );
+  if (loading) {
+    return (<div>Loading...</div>);
+  }
+  if (error) {
+    console.log(error);
+    return (<div>Error...</div>);
+  }
+  if (!data) {
+    return (<div>no data</div>);
+  }
   return (
     <div>
       <Typography variant="h2" gutterBottom className={classes.genreTitle}>
         Sports
       </Typography>
-      {loading ? (
-        <p>Loading ...</p>
-      ) : (
-        <Grid
-          container
-          spacing={6}
-          className={classes.gridContainer}
-          justify="space-evenly"
-        >
-          {data!.gamesGenre.map((game) => (
-            <Grid item xs={12} sm={7} md={4}>
+      <Grid
+        container
+        spacing={6}
+        className={classes.gridContainer}
+        justify="space-evenly"
+      >
+        {data.searchGamesByGenre.map((game) => (
+          <Grid item xs={12} sm={7} md={4}>
+            <Link underline="none" component={RouterLink} to={`/games/${game.id}`}>
               <Card className={classes.root} variant="outlined">
                 <CardActionArea>
                   <CardMedia
                     component="img"
                     height="190"
-                    src={game.imglink}
+                    src={game.imgLink}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -122,10 +133,10 @@ export default function Sports(): ReactElement {
                   </CardContent>
                 </CardActionArea>
               </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+            </Link>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 }

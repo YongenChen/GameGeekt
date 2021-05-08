@@ -11,31 +11,32 @@ import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import { Genres } from '../utils/enums';
 
-interface gamesGenre {
-  gameid: number;
+interface IGame {
+  id: number;
   name: string;
-  genre: string;
+  genre: Genres;
   description: string;
-  imglink: string;
+  imgLink: string;
 }
 
-interface gamesData {
-  gamesGenre: gamesGenre[];
+interface IQuery {
+  searchGamesByGenre: IGame[];
 }
 
-interface gamesVar {
-  genre: string;
+interface IGameVar {
+  genre: Genres;
 }
 
 const GET_GAMES = gql`
-  query GetGames($genre: String){
-    gamesGenre(genre: $genre){
-      gameid,
+  query GetGames($genre: Genre!){
+    searchGamesByGenre(genre: $genre){
+      id,
       name,
       genre,
       description,
-      imglink
+      imgLink
     }
   }
   `;
@@ -78,58 +79,64 @@ const useStyles = makeStyles({
 
 export default function MassivelyMultiplayerOnline(): ReactElement {
   const classes = useStyles();
-  const { loading, data } = useQuery<gamesData, gamesVar>(
-    GET_GAMES, { variables: { genre: 'MMO' } },
+  const { data, loading, error } = useQuery<IQuery, IGameVar>(
+    GET_GAMES, { variables: { genre: Genres.MMO } },
   );
+  if (loading) {
+    return (<div>Loading...</div>);
+  }
+  if (error) {
+    console.log(error);
+    return (<div>Error...</div>);
+  }
+  if (!data) {
+    return (<div>no data</div>);
+  }
   return (
     <div>
       <Typography variant="h2" gutterBottom className={classes.genreTitle}>
         Massively Multiplayer Online (MMO)
       </Typography>
-      {loading ? (
-        <p>Loading ...</p>
-      ) : (
-        <Grid
-          container
-          spacing={6}
-          className={classes.gridContainer}
-          justify="space-evenly"
-        >
-          {data!.gamesGenre.map((game) => (
-            <Grid item xs={12} sm={7} md={4}>
-              <Link underline="none" component={RouterLink} to={`/games/${game.gameid}`}>
-                <Card className={classes.root} variant="outlined">
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="190"
-                      src={game.imglink}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        { game.name }
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        { game.description }
-                      </Typography>
-                    </CardContent>
-                    <CardContent>
-                      <Typography variant="h6" color="textSecondary" component="p">
-                        Rating:
-                      </Typography>
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <StarHalfIcon />
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+      <Grid
+        container
+        spacing={6}
+        className={classes.gridContainer}
+        justify="space-evenly"
+      >
+        {data.searchGamesByGenre.map((game) => (
+          <Grid item xs={12} sm={7} md={4}>
+            <Link underline="none" component={RouterLink} to={`/games/${game.id}`}>
+              <Card className={classes.root} variant="outlined">
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="190"
+                    src={game.imgLink}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      { game.name }
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                      { game.description }
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography variant="h6" color="textSecondary" component="p">
+                      Rating:
+                    </Typography>
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarIcon />
+                    <StarHalfIcon />
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 }
