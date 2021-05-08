@@ -9,6 +9,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 interface gamesGenre {
   gameid: number;
@@ -95,33 +97,35 @@ export default function MultiplayerOnlineBattleArena(): ReactElement {
         >
           {data!.gamesGenre.map((game) => (
             <Grid item xs={12} sm={7} md={4}>
-              <Card className={classes.root} variant="outlined">
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="190"
-                    src={game.imglink}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      { game.name }
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                      { game.description }
-                    </Typography>
-                  </CardContent>
-                  <CardContent>
-                    <Typography variant="h6" color="textSecondary" component="p">
-                      Rating:
-                    </Typography>
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarHalfIcon />
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+              <Link underline="none" component={RouterLink} to={`/games/${game.gameid}`}>
+                <Card className={classes.root} variant="outlined">
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      height="190"
+                      src={game.imglink}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        { game.name }
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        { game.description }
+                      </Typography>
+                    </CardContent>
+                    <CardContent>
+                      <Typography variant="h6" color="textSecondary" component="p">
+                        Rating:
+                      </Typography>
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon />
+                      <StarHalfIcon />
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Link>
             </Grid>
           ))}
         </Grid>

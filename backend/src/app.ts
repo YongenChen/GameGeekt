@@ -34,7 +34,7 @@ async function main() {
     database: process.env.dbname,
     entities: [path.join(__dirname, './entities/*')],
     logging: false,
-    dropSchema: false,
+    dropSchema: true,
     synchronize: true,
   });
 
