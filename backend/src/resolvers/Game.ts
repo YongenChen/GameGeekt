@@ -52,7 +52,7 @@ export default class GameResolver {
       throw new UserInputError('Genre is required.');
     }
 
-    return Game.find({ where: { genre: Like(`%${name}%`) } });
+    return Game.find({ where: { name: Like(`%${name}%`) } });
   }
 
   @Query(() => Game)
