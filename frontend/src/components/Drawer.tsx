@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     borderBottom: '1px solid #FFFF',
   },
   listItemBorder: {
-    borderTop: '1px solid #FFFF',
+    borderTop: '4px solid #FFFF',
   },
   listItemText: {
     fontFamily: "'Play', Roboto",

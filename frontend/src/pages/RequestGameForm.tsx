@@ -17,6 +17,7 @@ import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router';
 import { AlertTitle, Alert } from '@material-ui/lab';
+import { useSnackbar } from 'notistack';
 import { Genres } from '../utils/enums';
 
 const useStyles = makeStyles((theme) => ({
@@ -172,27 +173,26 @@ const genreList: Genre[] = [
 export default function RequestGameForm(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [createGame, { error }] = useMutation(CREATE_GAME);
 
   const formik = useFormik({
     initialValues,
     validate,
-    onSubmit: async () => {
+    onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await createGame({
         variables: {
-          name: 'aoej3',
-          genre: `${Genres.MMO}`,
-          description: 'Fighting',
-          imgLink: '',
-
-          // name: values.name,
-          // genre: values.genre,
-          // description: values.description,
-          // imgLink: values.imgLink,
+          name: values.name,
+          genre: values.genre,
+          description: values.description,
+          imgLink: values.imgLink,
         },
       });
       if (response.data) {
+        enqueueSnackbar(`Successfully requested "${values.name}"`, {
+          variant: 'success',
+        });
         history.push('/');
       }
     },
@@ -208,7 +208,6 @@ export default function RequestGameForm(): ReactElement {
     );
   }
 
-  console.log(errorMessage);
   return (
     <Container
       className={classes.rootContainer}
@@ -270,19 +269,6 @@ export default function RequestGameForm(): ReactElement {
             </Select>
             <FormHelperText>{formik.touched.genre && formik.errors.genre}</FormHelperText>
           </FormControl>
-          {/* <TextField
-            error={formik.touched.genre && Boolean(formik.errors.genre)}
-            helperText={formik.touched.genre && formik.errors.genre}
-            label="Game Genre"
-            name="genre"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.genre}
-            variant="outlined"
-            required
-            fullWidth
-            disabled={formik.isSubmitting}
-          /> */}
           <TextField
             error={formik.touched.description && Boolean(formik.errors.description)}
             helperText={formik.touched.description && formik.errors.description}

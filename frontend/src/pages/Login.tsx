@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import { gql, useMutation } from '@apollo/client';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -92,6 +93,7 @@ const validate = (values:ILogin) => {
 export default function Login(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [signIn, { error }] = useMutation(SIGNIN_USER, {
     update: (cache, { data }) => {
       cache.writeQuery({
@@ -123,13 +125,15 @@ export default function Login(): ReactElement {
         },
       });
       if (response.data) {
+        enqueueSnackbar('Successfully logged in!', {
+          variant: 'success',
+        });
         history.push('/');
       }
     },
   });
 
   let errorMessage:string|ReactElement|undefined = error?.message;
-  console.log(errorMessage);
   if (errorMessage === 'Username not unique.') {
     errorMessage = (
       <>

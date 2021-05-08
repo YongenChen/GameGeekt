@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -116,6 +117,7 @@ const validate = (values:ISignUp) => {
 export default function SignUp(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [registerUser, { error }] = useMutation(REGISTER_USER, {
     update: (cache, { data }) => {
       cache.writeQuery({
@@ -148,6 +150,9 @@ export default function SignUp(): ReactElement {
         },
       });
       if (response.data) {
+        enqueueSnackbar('Successfully registered!', {
+          variant: 'success',
+        });
         history.push('/');
       }
     },
