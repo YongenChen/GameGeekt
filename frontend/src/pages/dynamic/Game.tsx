@@ -57,6 +57,15 @@ const useStyles = makeStyles(() => ({
     fontFamily: "'Questrial', sans-serif",
     fontSize: '17px',
   },
+  button: {
+    background: ' rgba( 172, 166, 215, 0.70 )',
+    height: '50px',
+    boxShadow: '0 8px 32px 0 rgba( 0, 0, 0, 0.37 )',
+    backdropFilter: 'blur(7 px)',
+    borderRadius: '5px',
+    border: '1px solid rgba( 255, 255, 255, 0.18 )',
+    WebkitBackdropFilter: 'blur(7.0px)',
+  },
 }));
 
 interface IReviewer {
@@ -183,6 +192,7 @@ function Game(): ReactElement {
             type="button"
             variant="contained"
             color="secondary"
+            className={classes.button}
           >
             Create a review!
           </Button>
@@ -198,9 +208,21 @@ function Game(): ReactElement {
       );
     } else {
       content = (
-        <Typography variant="h4">
-          There are currently no reviews for this game.
-        </Typography>
+        <>
+          <Typography variant="h4">
+            There are currently no reviews for this game.
+          </Typography>
+          <Button
+            component={Link}
+            to={`/Create-Review/${data.game.id}`}
+            type="button"
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+          >
+            Create a review!
+          </Button>
+        </>
       );
     }
   }
