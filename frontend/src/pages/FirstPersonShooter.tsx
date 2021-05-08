@@ -13,7 +13,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 import { Genres } from '../utils/enums';
 
-interface searchGamesByGenre {
+interface IGame {
   id: number;
   name: string;
   genre: Genres;
@@ -21,12 +21,12 @@ interface searchGamesByGenre {
   imgLink: string;
 }
 
-interface IQuery {
-  searchGamesByGenre: searchGamesByGenre[];
+interface IResult {
+  searchGamesByGenre: IGame[];
 }
 
-interface gamesVar {
-  genres: Genres;
+interface IGamesVar {
+  genre: Genres;
 }
 
 const GET_GAMES = gql`
@@ -79,8 +79,8 @@ const useStyles = makeStyles({
 
 export default function FirstPersonShooter(): ReactElement {
   const classes = useStyles();
-  const { data, loading, error } = useQuery<IQuery, gamesVar>(
-    GET_GAMES, { variables: { genres: Genres.FPS } },
+  const { data, loading, error } = useQuery<IResult, IGamesVar>(
+    GET_GAMES, { variables: { genre: Genres.FPS } },
   );
   if (loading) {
     return (<div>Loading...</div>);
@@ -90,7 +90,7 @@ export default function FirstPersonShooter(): ReactElement {
     return (<div>Error...</div>);
   }
   if (!data) {
-    return (<div>no data</div>);
+    return (<div>There is no data</div>);
   }
   return (
     <div>
@@ -103,7 +103,7 @@ export default function FirstPersonShooter(): ReactElement {
         className={classes.gridContainer}
         justify="space-evenly"
       >
-        {data!.searchGamesByGenre.map((game) => (
+        {data.searchGamesByGenre.map((game) => (
           <Grid item xs={12} sm={7} md={4}>
             <Link underline="none" component={RouterLink} to={`/games/${game.id}`}>
               <Card className={classes.root} variant="outlined">
