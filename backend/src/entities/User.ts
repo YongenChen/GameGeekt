@@ -20,7 +20,7 @@ export default class User extends BaseEntity {
     username: string;
 
     @Field()
-    @Column({ type: 'varchar', unique: true, length: 3000 })
+    @Column({ type: 'varchar', unique: true, length: 255 })
     password: string;
 
     @Field()
