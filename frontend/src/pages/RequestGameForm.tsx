@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: '100%',
+    height: '100vh',
     alignItems: 'center',
   },
   title: {
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
   alertContainer: {
     textAlign: 'left',
-    marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
   },
   form: {
@@ -94,10 +93,6 @@ const validate = (values:IRequestGame) => {
 
   if (!values.rating) {
     errors.rating = 'Please enter a rating out of /5';
-  } else if (values.rating.length === 0) {
-    errors.rating = 'Please enter a digit between 0 to 5';
-  } else if (!/^([^0-5]*)$/.test(values.rating)) {
-    errors.rating = 'Please enter a digit between 0 and 5';
   }
 
   if (!values.description) {
@@ -164,12 +159,6 @@ export default function RequestGameForm(): ReactElement {
       className={classes.rootContainer}
     >
       <div>
-        <Typography
-          variant="h4"
-          className={classes.title}
-        >
-          <b>Game Request Form</b>
-        </Typography>
         <Fade
           in={Boolean(errorMessage)}
           timeout={1000}
@@ -182,6 +171,12 @@ export default function RequestGameForm(): ReactElement {
             {errorMessage}
           </Alert>
         </Fade>
+        <Typography
+          variant="h4"
+          className={classes.title}
+        >
+          <b>Game Request Form</b>
+        </Typography>
         <div className={classes.form}>
           <TextField
             error={formik.touched.name && Boolean(formik.errors.name)}

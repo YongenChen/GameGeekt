@@ -5,7 +5,8 @@ import {
 import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
-import { AlertTitle, Alert } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
@@ -170,12 +171,6 @@ export default function SignUp(): ReactElement {
       className={classes.rootContainer}
     >
       <div>
-        <Typography
-          variant="h4"
-          className={classes.title}
-        >
-          <b>Sign Up</b>
-        </Typography>
         <Fade
           in={Boolean(errorMessage)}
           timeout={1000}
@@ -188,6 +183,12 @@ export default function SignUp(): ReactElement {
             {errorMessage}
           </Alert>
         </Fade>
+        <Typography
+          variant="h4"
+          className={classes.title}
+        >
+          <b>Sign Up</b>
+        </Typography>
         <div className={classes.form}>
           <TextField
             error={formik.touched.username && Boolean(formik.errors.username)}

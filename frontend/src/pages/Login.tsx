@@ -4,7 +4,8 @@ import {
 } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { AlertTitle, Alert } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import { gql, useMutation } from '@apollo/client';
 
 const useStyles = makeStyles((theme) => ({
@@ -147,12 +148,6 @@ export default function Login(): ReactElement {
       className={classes.rootContainer}
     >
       <div>
-        <Typography
-          variant="h4"
-          className={classes.title}
-        >
-          <b>Log In</b>
-        </Typography>
         <Fade
           in={Boolean(errorMessage)}
           timeout={1000}
@@ -165,6 +160,12 @@ export default function Login(): ReactElement {
             {errorMessage}
           </Alert>
         </Fade>
+        <Typography
+          variant="h4"
+          className={classes.title}
+        >
+          <b>Log In</b>
+        </Typography>
         <form
           className={classes.form}
           onSubmit={formik.handleSubmit}
