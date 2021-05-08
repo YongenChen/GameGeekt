@@ -18,7 +18,10 @@ RUN npm ci --only=production
 # Bundle app source
 COPY . .
 
+# Compiles the typescript code down to javascript
+RUN npm run tsc
+
 EXPOSE 9090
 
 # Command container will actually run when called
-CMD ["node", "app.js"]
+CMD ["npm", "start"]
