@@ -33,6 +33,7 @@ import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
 import TestPage from './pages/testPage';
 import Game from './pages/dynamic/Game';
+import PostReview from './pages/dynamic/PostReview';
 
 const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_SERVER_URL,
@@ -154,6 +155,9 @@ function App() {
             </Route>
             <Route path="/games/:id">
               <Game />
+            </Route>
+            <Route path="/Create-Review/:id">
+              <PostReview />
             </Route>
             <Route path="/">
               <Home />

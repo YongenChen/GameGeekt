@@ -174,8 +174,11 @@ function Game(): ReactElement {
     if (data.game.reviews.length > 0) {
       content = (
         <>
-          <Typography className={classes.cardContentTitle} variant="h2" component="h3">
+          <Typography className={classes.cardContentTitle} variant="h3" component="h3">
+            Post a review about:
+            {' '}
             {data.game.name}
+            !
           </Typography>
           <Button
             component={Link}
