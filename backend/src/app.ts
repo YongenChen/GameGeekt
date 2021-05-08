@@ -12,61 +12,8 @@ import { buildSchema } from 'type-graphql';
 import UserResolver from './resolvers/User';
 import GameResolver from './resolvers/Game';
 import ReviewResolver from './resolvers/Review';
-// import resolvers from './db_functions/resolvers';
 
 dotenv.config();
-
-/*
-const typeDefs = gql`
-  type User {
-    userid: Int
-    username: String
-    email: String
-    password: String
-  }
-
-  type Game {
-    gameid: Int
-    name: String
-    genre: String
-    description: String
-    imglink: String
-  }
-
-  type Review {
-    reviewid: Int
-    gameid: Int
-    reviewerid: Int
-    rating: Int
-    reviewbody: String
-  }
-
-  type Query {
-    currentUser(id: Int): User
-    user(userid: Int): User
-    game(gameid: Int): Game
-    gamesByTitle(title: String): [Game]
-    gameByTitle(name: String): Game
-    review(reviewid: Int): Review
-    users: [User]
-    games: [Game]
-    gamesGenre(genre: String): [Game]
-    gameReviews(gameid: Int): [Review]
-    userReviews(userid: Int): [Review]
-  }
-
-  type Mutation {
-    registerUser(username: String, email: String, password: String, confirmPassword: String): User
-    addGame(name: String, genre: String, description: String, imglink: String): Game
-    createReview(gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
-    updateReview(reviewid: Int, gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
-    deleteReview(reviewid: Int): Boolean
-    login(username: String, password: String): User
-    logout: Boolean
-  }
-
-`;
-*/
 
 async function main() {
   const connection = await createConnection({
@@ -77,9 +24,9 @@ async function main() {
     password: process.env.dbpassword,
     database: process.env.dbname,
     entities: [path.join(__dirname, './entities/*')],
-    logging: true,
-    dropSchema: true,
-    synchronize: true,
+    logging: false,
+    dropSchema: false,
+    synchronize: false,
   });
 
   const RedisStore = connectRedis(session);

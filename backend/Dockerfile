@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 9090
 
 # Command container will actually run when called
-CMD ["node", "app.js"]
+CMD ["npm", "start"]
