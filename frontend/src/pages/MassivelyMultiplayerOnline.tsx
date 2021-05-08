@@ -86,7 +86,6 @@ export default function MassivelyMultiplayerOnline(): ReactElement {
     return (<div>Loading...</div>);
   }
   if (error) {
-    console.log(error);
     return (<div>Error...</div>);
   }
   if (!data) {

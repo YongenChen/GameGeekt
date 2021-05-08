@@ -87,7 +87,7 @@ function GameReviewItem({
   return (
     <ListItem>
       {id}
-      {JSON.stringify(reviewer)}
+      {JSON.stringify(reviewer.username)}
       {' '}
       {reviewbody}
       {' '}
@@ -114,6 +114,9 @@ function Game(): ReactElement {
       content = (
         <List>
           {data.game.reviews.map((gameReview) => <GameReviewItem gameReview={gameReview} />)}
+          <Typography>
+            {data.game.name}
+          </Typography>
         </List>
       );
     } else {
@@ -125,6 +128,7 @@ function Game(): ReactElement {
     }
   }
   if (error) {
+    console.log(error);
     content = (
       <Typography variant="h2">
         Sorry, this request is invalid.

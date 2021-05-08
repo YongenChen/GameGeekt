@@ -86,7 +86,6 @@ export default function Mobile(): ReactElement {
     return (<div>Loading...</div>);
   }
   if (error) {
-    console.log(error);
     return (<div>Error...</div>);
   }
   if (!data) {
