@@ -21,11 +21,19 @@ interface IGame {
   imgLink: string;
 }
 
+<<<<<<< HEAD
 interface IQuery {
   searchGamesByGenre: IGame[];
 }
 
 interface IGameVar {
+=======
+interface IResult {
+  searchGamesByGenre: IGame[];
+}
+
+interface IGamesVar {
+>>>>>>> 3f6a3137549e05530544b5cb1f844b5f6b6f2bd3
   genre: Genres;
 }
 
@@ -79,7 +87,11 @@ const useStyles = makeStyles({
 
 export default function FirstPersonShooter(): ReactElement {
   const classes = useStyles();
+<<<<<<< HEAD
   const { data, loading, error } = useQuery<IQuery, IGameVar>(
+=======
+  const { data, loading, error } = useQuery<IResult, IGamesVar>(
+>>>>>>> 3f6a3137549e05530544b5cb1f844b5f6b6f2bd3
     GET_GAMES, { variables: { genre: Genres.FPS } },
   );
   if (loading) {
@@ -90,7 +102,7 @@ export default function FirstPersonShooter(): ReactElement {
     return (<div>Error...</div>);
   }
   if (!data) {
-    return (<div>no data</div>);
+    return (<div>There is no data</div>);
   }
   return (
     <div>

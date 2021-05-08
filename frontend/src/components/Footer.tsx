@@ -26,6 +26,7 @@ const useStyles = makeStyles(() => createStyles({
   },
   link: {
     textDecoration: 'none',
+    color: '#fcdfd8',
     '&:visited': {
       color: '#fcdfd8',
     },
