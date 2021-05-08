@@ -47,12 +47,12 @@ export default class Game extends BaseEntity {
     genre: Genres;
 
     @Field()
-    @Column({ type: 'varchar', unique: false, length: 3000 })
+    @Column({ type: 'varchar', unique: false, length: 255 })
     description: string;
 
     @Field({ nullable: true })
     @Column({
-      type: 'varchar', unique: false, length: 3000, default: '', nullable: true,
+      type: 'varchar', unique: false, length: 255, default: '', nullable: true,
     })
     imgLink: string;
 

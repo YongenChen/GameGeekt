@@ -20,7 +20,7 @@ export default class Review extends BaseEntity {
     rating: number;
 
     @Field()
-    @Column({ type: 'varchar', unique: true, length: 3072 })
+    @Column({ type: 'varchar', unique: true, length: 255 })
     reviewbody: string;
 
     @Field(() => User)
