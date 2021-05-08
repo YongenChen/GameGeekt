@@ -27,7 +27,9 @@ export default class GameResolver {
     if (!id) {
       throw new UserInputError('Game ID is required.');
     }
-    const game = await Game.findOneOrFail(id);
+    const game = await Game.findOneOrFail(id, {
+      relations: ['reviews', 'reviews.reviewer'],
+    });
     return game;
   }
 

@@ -12,17 +12,8 @@ import { buildSchema } from 'type-graphql';
 import UserResolver from './resolvers/User';
 import GameResolver from './resolvers/Game';
 import ReviewResolver from './resolvers/Review';
-// import resolvers from './db_functions/resolvers';
 
 dotenv.config();
-
-/*
-    type Mutation {
-    updateReview(reviewid: Int, gameid: Int, reviewerid: Int, rating: Int, reviewbody: String): Review
-  }
-
-`;
-*/
 
 async function main() {
   const connection = await createConnection({
@@ -33,11 +24,13 @@ async function main() {
     password: process.env.dbpassword,
     database: process.env.dbname,
     entities: [path.join(__dirname, './entities/*')],
+    migrations: [path.join(__dirname, './migration/*')],
     logging: false,
-    dropSchema: true,
-    synchronize: true,
+    dropSchema: false,
+    synchronize: false,
   });
 
+  await connection.runMigrations();
   const RedisStore = connectRedis(session);
   const redisClient = new Redis({ host: process.env.redishost });
 
