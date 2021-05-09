@@ -22,6 +22,8 @@ import RequestGameForm from './pages/RequestGameForm';
 import Game from './pages/dynamic/Game';
 import PostReview from './pages/dynamic/PostReview';
 import Genres from './pages/dynamic/GenresPage';
+import NotFound from './pages/Error404';
+import AllGames from './pages/AllGames';
 
 const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_SERVER_URL,
@@ -102,6 +104,9 @@ function App() {
             <Route path="/Request-Game-Form">
               <RequestGameForm />
             </Route>
+            <Route path="/games/all">
+              <AllGames />
+            </Route>
             <Route path="/games/:id">
               <Game />
             </Route>
@@ -111,8 +116,11 @@ function App() {
             <Route path="/genre/:genre">
               <Genres />
             </Route>
-            <Route path="/">
+            <Route path="/" exact>
               <Home />
+            </Route>
+            <Route path="/*">
+              <NotFound />
             </Route>
           </Switch>
           <Footer />

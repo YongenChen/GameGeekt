@@ -24,6 +24,7 @@ import PuzzleImage from '../images/ItTakesTwo.jpg';
 import SportsImage from '../images/RocketLeague.jpg';
 import RPGImage from '../images/Octo.jpg';
 import MobileImage from '../images/pokemonGO.png';
+import { Genres } from '../utils/enums';
 
 SwiperCore.use([Pagination, Navigation]);
 const useStyles = makeStyles(() => createStyles({
@@ -72,61 +73,61 @@ const images: Image[] = [
   {
     src: FPSImage,
     alt: 'Valorant',
-    path: './first-person-shooter',
+    path: `/genre/${Genres.FPS}`,
     genre: 'First Person Shooter',
   },
   {
     src: MOBAImage,
     alt: 'League of Legends',
-    path: './multiplayer-online-battle-arena',
+    path: `/genre/${Genres.MOBA}`,
     genre: 'Multiplayer Online Battle Arena',
   },
   {
     src: MMOImage,
     alt: 'FFXIV',
-    path: './massively-multiplayer-online',
+    path: `/genre/${Genres.MMO}`,
     genre: 'Massively Multiplayer Online',
   },
   {
     src: SIMImage,
     alt: 'Animal Crossing New Horizons',
-    path: './simulation',
+    path: `/genre/${Genres.SIMULATION}`,
     genre: 'Simulation',
   },
   {
     src: ADVImage,
     alt: 'Legend of Zelda: Breath of the Wild',
-    path: './adventure',
+    path: `/genre/${Genres.ADVENTURE}`,
     genre: 'Adventure',
   },
   {
     src: RTSImage,
     alt: 'Age of Empires',
-    path: './real-time-strategy',
+    path: `/genre/${Genres.RTS}`,
     genre: 'Real-Time Strategy',
   },
   {
     src: PuzzleImage,
     alt: 'It Takes Two',
-    path: './puzzle',
+    path: `/genre/${Genres.PUZZLE}`,
     genre: 'Puzzle',
   },
   {
     src: SportsImage,
     alt: 'Rocket League',
-    path: './sports',
+    path: `/genre/${Genres.SPORTS}`,
     genre: 'Sports',
   },
   {
     src: RPGImage,
     alt: 'Octopath Traveler',
-    path: './role-playing',
+    path: `/genre/${Genres.RP}`,
     genre: 'Role-Playing',
   },
   {
     src: MobileImage,
     alt: 'Pokemon GO',
-    path: '/mobile-games',
+    path: `/genre/${Genres.MOBILE}`,
     genre: 'Mobile',
   },
 ];

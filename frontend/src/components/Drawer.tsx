@@ -75,9 +75,24 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to={`/genre/${Genres.FPS}`}
+            to="/games/all"
             onClick={onClose}
             className={classes.listItemBorder}
+          >
+            <ListItemText className={classes.listItemText}>
+              <Typography
+                variant="h6"
+                className={classes.listItemText}
+              >
+                Explore all games
+              </Typography>
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to={`/genre/${Genres.FPS}`}
+            onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
               <Typography
