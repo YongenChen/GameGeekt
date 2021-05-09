@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import {
   Button,
-  CircularProgress, Container, Grid, makeStyles, Typography,
+  CircularProgress, Container, DialogTitle, Grid, makeStyles, Typography,
 } from '@material-ui/core';
 import React, { ReactElement } from 'react';
 import Card from '@material-ui/core/Card';
@@ -9,8 +9,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import FaceIcon from '@material-ui/icons/Face';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Dialog from '@material-ui/core/Dialog';
 import { Genres } from '../../utils/enums';
+import DialogContent from '../../components/DialogContent';
 
 const useStyles = makeStyles(() => ({
   rootContainer: {
@@ -70,6 +72,9 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-start',
     fontFamily: "'Questrial', sans-serif",
     fontSize: '17px',
+  },
+  dialog: {
+    background: '#22223B',
   },
   button: {
     background: ' rgba( 172, 166, 215, 0.70 )',
@@ -183,6 +188,14 @@ function GameReviewItem({
 function Game(): ReactElement {
   const classes = useStyles();
   const { id } = useParams<IParams>();
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const { data, loading, error } = useQuery<IResponse, IVariables>(GET_GAME_REVIEWS, {
     variables: {
       id: +id,
@@ -203,12 +216,11 @@ function Game(): ReactElement {
             Reviews
           </Typography>
           <Button
-            component={Link}
-            to={`/Create-Review/${data.game.id}`}
             type="button"
             variant="contained"
             color="secondary"
             className={classes.button}
+            onClick={handleClickOpen}
           >
             Create a review!
           </Button>
@@ -231,16 +243,20 @@ function Game(): ReactElement {
             {data.game.name}
             .
           </Typography>
+          <br />
           <Button
-            component={Link}
-            to={`/Create-Review/${data.game.id}`}
             type="button"
             variant="contained"
             color="secondary"
             className={classes.button}
+            onClick={handleClickOpen}
           >
             Create a review!
           </Button>
+          <Dialog open={open} onClose={handleClose}>
+            <DialogTitle className={classes.dialog}>New Review</DialogTitle>
+            <DialogContent gameid={data.game.id} onClose={handleClose} />
+          </Dialog>
         </div>
       );
     }
