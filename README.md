@@ -12,7 +12,20 @@
 
 -Sample Demo Screenshots
     https://cdn.discordapp.com/attachments/805994143641370689/840837652889731072/Screenshot_413.png
-    
+
+-Folder Structure
+    frontend
+        src
+    backend
+        src
+    scripts
+        build_backend.sh
+        build_frontend.sh
+        start_backend.sh
+        start_frontend.sh
+        stop_backend.sh
+        stop_frontend.sh
+    README.md
 
 -How to run project locally
     Backend: cd to Backend folder on a linux machine and run "docker-compose up --build". It will create a docker container with images 

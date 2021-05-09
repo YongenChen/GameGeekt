@@ -1,0 +1,1 @@
+these scripts are only for the ec2 server to run. Don't use them if you are trying to run your server locally.

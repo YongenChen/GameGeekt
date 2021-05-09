@@ -1,0 +1,1 @@
+Schema script not needed as type graphql has its own migration in backend/src/migration
