@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core';
 import React, { ReactElement, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Genres } from '../utils/enums';
 
 interface Props {
 open: boolean;
@@ -74,7 +75,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/first-person-shooter"
+            to={`/genre/${Genres.FPS}`}
             onClick={onClose}
             className={classes.listItemBorder}
           >
@@ -90,7 +91,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/multiplayer-online-battle-arena"
+            to={`/genre/${Genres.MOBA}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -105,7 +106,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/massively-multiplayer-online"
+            to={`/genre/${Genres.MMO}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -120,7 +121,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/simulation"
+            to={`/genre/${Genres.SIMULATION}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -135,7 +136,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/adventure"
+            to={`/genre/${Genres.ADVENTURE}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -150,7 +151,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/real-time-strategy"
+            to={`/genre/${Genres.RTS}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -165,7 +166,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/puzzle"
+            to={`/genre/${Genres.PUZZLE}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -180,7 +181,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/sports"
+            to={`/genre/${Genres.SPORTS}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -195,7 +196,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/role-playing"
+            to={`/genre/${Genres.RP}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>
@@ -210,7 +211,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/mobile-games"
+            to={`/genre/${Genres.MOBILE}`}
             onClick={onClose}
           >
             <ListItemText className={classes.listItemText}>

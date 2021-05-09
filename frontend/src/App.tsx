@@ -14,26 +14,14 @@ import Home from './pages/Home';
 import AppBar from './components/AppBar';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import FirstPersonShooter from './pages/FirstPersonShooter';
-import MultiplayerOnlineBattleArena from './pages/MultiplayerOnlineBattleArena';
-import MassivelyMultiplayerOnline from './pages/MassivelyMultiplayerOnline';
-import Simulations from './pages/Simulation';
-import StealthShooter from './pages/StealthShooter';
-import Combat from './pages/Combat';
-import Adventure from './pages/Adventure';
-import RealTimeStrategy from './pages/RealTimeStrategy';
-import Puzzle from './pages/Puzzle';
-import Sports from './pages/Sports';
-import RolePlaying from './pages/RolePlaying';
-import Mobile from './pages/Mobile';
 import Footer from './components/Footer';
 import About from './pages/About';
 import ContactUs from './pages/ContactUs';
 import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
-import TestPage from './pages/testPage';
 import Game from './pages/dynamic/Game';
 import PostReview from './pages/dynamic/PostReview';
+import Genres from './pages/dynamic/GenresPage';
 
 const link = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_SERVER_URL,
@@ -96,50 +84,11 @@ function App() {
             getGlobalTheme={getGlobalTheme}
           />
           <Switch>
-            <Route path="/testPage">
-              <TestPage />
-            </Route>
             <Route path="/sign-up">
               <SignUp />
             </Route>
             <Route path="/login">
               <Login />
-            </Route>
-            <Route path="/first-person-shooter">
-              <FirstPersonShooter />
-            </Route>
-            <Route path="/multiplayer-online-battle-arena">
-              <MultiplayerOnlineBattleArena />
-            </Route>
-            <Route path="/massively-multiplayer-online">
-              <MassivelyMultiplayerOnline />
-            </Route>
-            <Route path="/simulation">
-              <Simulations />
-            </Route>
-            <Route path="/stealth-shooter">
-              <StealthShooter />
-            </Route>
-            <Route path="/combat">
-              <Combat />
-            </Route>
-            <Route path="/adventure">
-              <Adventure />
-            </Route>
-            <Route path="/real-time-strategy">
-              <RealTimeStrategy />
-            </Route>
-            <Route path="/puzzle">
-              <Puzzle />
-            </Route>
-            <Route path="/sports">
-              <Sports />
-            </Route>
-            <Route path="/role-playing">
-              <RolePlaying />
-            </Route>
-            <Route path="/mobile-games">
-              <Mobile />
             </Route>
             <Route path="/about">
               <About />
@@ -158,6 +107,9 @@ function App() {
             </Route>
             <Route path="/Create-Review/:id">
               <PostReview />
+            </Route>
+            <Route path="/genre/:genre">
+              <Genres />
             </Route>
             <Route path="/">
               <Home />

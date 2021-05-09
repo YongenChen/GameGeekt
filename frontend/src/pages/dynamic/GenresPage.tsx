@@ -9,9 +9,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import StarIcon from '@material-ui/icons/Star';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import { Genres } from '../utils/enums';
+import { Genres } from '../../utils/enums';
 
 interface IGame {
   id: number;
@@ -26,6 +26,10 @@ interface IQuery {
 }
 
 interface IGameVar {
+  genre: Genres;
+}
+
+interface IParams {
   genre: Genres;
 }
 
@@ -77,10 +81,16 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Mobile(): ReactElement {
+function GenresPage(): ReactElement {
   const classes = useStyles();
+  const { genre } = useParams<IParams>();
   const { data, loading, error } = useQuery<IQuery, IGameVar>(
-    GET_GAMES, { variables: { genre: Genres.MOBILE } },
+    GET_GAMES, {
+      variables:
+      {
+        genre,
+      },
+    },
   );
   if (loading) {
     return (<div>Loading...</div>);
@@ -94,7 +104,7 @@ export default function Mobile(): ReactElement {
   return (
     <div>
       <Typography variant="h2" gutterBottom className={classes.genreTitle}>
-        Mobile
+        { genre }
       </Typography>
       <Grid
         container
@@ -139,3 +149,5 @@ export default function Mobile(): ReactElement {
     </div>
   );
 }
+
+export default GenresPage;

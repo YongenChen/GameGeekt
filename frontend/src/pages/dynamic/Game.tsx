@@ -210,7 +210,10 @@ function Game(): ReactElement {
       content = (
         <>
           <Typography variant="h4">
-            There are currently no reviews for this game.
+            There are currently no reviews for
+            {' '}
+            {data.game.name}
+            .
           </Typography>
           <Button
             component={Link}
