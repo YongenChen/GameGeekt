@@ -48,6 +48,13 @@ const useStyles = makeStyles(() => ({
     fontSize: '18px',
     fontFamily: "'Noto Sans JP', sans-serif",
   },
+  genreTitle: {
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '20px',
+    textShadow: '5px 4px 4px black',
+    fontFamily: "'Bebas Neue', Roboto",
+  },
   cardContentTitle: {
     fontWeight: 'bold',
   },
@@ -183,8 +190,10 @@ function Game(): ReactElement {
     if (data.game.reviews.length > 0) {
       content = (
         <>
-          <Typography className={classes.cardContentTitle} variant="h2" component="h3">
+          <Typography className={classes.genreTitle} variant="h2">
             {data.game.name}
+            {'  '}
+            Reviews
           </Typography>
           <Button
             component={Link}

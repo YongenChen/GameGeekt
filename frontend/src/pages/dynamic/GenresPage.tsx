@@ -6,8 +6,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
-import StarIcon from '@material-ui/icons/Star';
-import StarHalfIcon from '@material-ui/icons/StarHalf';
+// import StarIcon from '@material-ui/icons/Star';
+// import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
@@ -19,6 +19,13 @@ interface IGame {
   genre: Genres;
   description: string;
   imgLink: string;
+  reviews: IGameReview[];
+}
+
+interface IGameReview {
+  id: number;
+  rating: number;
+  reviewbody: string;
 }
 
 interface IQuery {
@@ -40,7 +47,11 @@ const GET_GAMES = gql`
       name,
       genre,
       description,
-      imgLink
+      imgLink,
+      reviews{
+        id,
+        reviewbody
+      }
     }
   }
   `;
@@ -56,7 +67,7 @@ const useStyles = makeStyles({
     background: ' rgba( 172, 166, 215, 0.25 )',
     boxShadow: '0 8px 32px 0 rgba( 0, 0, 0, 0.37 )',
     minWidth: 300,
-    minHeight: 400,
+    minHeight: 200,
     backdropFilter: 'blur(7 px)',
     borderRadius: '10px',
     border: '1px solid rgba( 255, 255, 255, 0.18 )',
@@ -78,6 +89,7 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     paddingTop: '20px',
     textShadow: '5px 4px 4px black',
+    fontFamily: "'Bebas Neue', Roboto",
   },
 });
 
@@ -119,7 +131,7 @@ function GenresPage(): ReactElement {
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="190"
+                    height="250"
                     src={game.imgLink}
                   />
                   <CardContent>
@@ -132,13 +144,10 @@ function GenresPage(): ReactElement {
                   </CardContent>
                   <CardContent>
                     <Typography variant="h6" color="textSecondary" component="p">
-                      Rating:
+                      Ratings:
+                      {' '}
+                      { game.reviews.length }
                     </Typography>
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarHalfIcon />
                   </CardContent>
                 </CardActionArea>
               </Card>

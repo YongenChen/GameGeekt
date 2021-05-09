@@ -42,6 +42,12 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
+  genreTitle: {
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '20px',
+    textShadow: '5px 4px 4px black',
+  },
   cardheader: {
     display: 'flex',
     justifyContent: 'flex-start',
