@@ -188,7 +188,7 @@ function Game(): ReactElement {
       id: +id,
     },
   });
-  console.log(id);
+
   let content = (
     <CircularProgress />
   );
@@ -246,7 +246,6 @@ function Game(): ReactElement {
     }
   }
   if (error) {
-    console.log(error);
     content = (
       <Typography variant="h2">
         Sorry, this request is invalid.
