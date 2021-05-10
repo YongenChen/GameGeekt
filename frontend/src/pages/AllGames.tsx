@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import { Grid } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import noImageFound from '../images/NoImage.jpg';
 import { Genres } from '../utils/enums';
 
 interface IGames {
@@ -90,6 +91,14 @@ const useStyles = makeStyles({
   genreSubtitle: {
     fontStyle: 'italic',
   },
+  imageContainer: {
+    maxHeight: '250px',
+    height: '250px',
+    width: '460px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 function AllGames(): ReactElement {
@@ -122,11 +131,18 @@ function AllGames(): ReactElement {
             <Link underline="none" component={RouterLink} to={`/games/${game.id}`}>
               <Card className={classes.root} variant="outlined">
                 <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="250"
-                    src={game.imgLink}
-                  />
+                  <div>
+                    {game.imgLink ? (
+                      <CardMedia
+                        component="img"
+                        height="250"
+                        src={game.imgLink}
+                        alt={game.name}
+                      />
+                    ) : (
+                      <img src={noImageFound} alt="not found" className={classes.imageContainer} />
+                    )}
+                  </div>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
                       { game.name }
