@@ -36,7 +36,9 @@
     Frontend: cd to Frontend folder on a linux machine and run "npm start". It will run the app in development mode, and you can go to 
     http://localhost:3000 to view the frontend.
 
-- Project Diagrams:
+    Alternatively, you could use the scripts.
+
+-Project Diagrams:
     Sequence Diagram
     https://cdn.discordapp.com/attachments/840842108419964979/840842113935343646/unknown.png
 
