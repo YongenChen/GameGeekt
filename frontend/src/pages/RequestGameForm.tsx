@@ -287,7 +287,7 @@ export default function RequestGameForm(): ReactElement {
           <TextField
             error={formik.touched.imgLink && Boolean(formik.errors.imgLink)}
             helperText={formik.touched.imgLink && formik.errors.imgLink}
-            label="Link Image of Game (Optional)"
+            label="Game Image Link (Optional)"
             name="imgLink"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
