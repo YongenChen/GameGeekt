@@ -29,14 +29,14 @@
 
 - How to run project locally:
 
-    Backend: cd to Backend folder on a linux machine and run "docker-compose up --build". It will create a docker container with images 
+    Backend: cd to Backend folder on a linux machine and run "npm i", then "docker-compose up --build". It will create a docker container with images 
     for the MySQL Database, Redis, and the server. Start and stop the container or images through docker. You can go to http://localhost:9090 
     to view the GraphQL Playground.
 
-    Frontend: cd to Frontend folder on a linux machine and run "npm start". It will run the app in development mode, and you can go to 
+    Frontend: cd to Frontend folder on a linux machine and run "npm i", then "npm start". It will run the app in development mode, and you can go to 
     http://localhost:3000 to view the frontend.
 
-    Alternatively, you could use the scripts.
+    Alternatively, you could use the scripts after running "npm i" on the frontend and backend.
 
 -Project Diagrams:
     Sequence Diagram
