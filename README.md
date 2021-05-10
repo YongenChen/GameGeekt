@@ -37,6 +37,7 @@
     http://localhost:3000 to view the frontend.
 
     Alternatively, you could use the scripts after running "npm i" on the frontend and backend.
+    If you are running WSL, then line endings might be changed from LF to CRLF.
 
 -Project Diagrams:
     Sequence Diagram
