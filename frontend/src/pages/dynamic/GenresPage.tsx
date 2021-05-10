@@ -135,6 +135,7 @@ function GenresPage(): ReactElement {
                     component="img"
                     height="250"
                     src={game.imgLink}
+                    alt={game.name}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
