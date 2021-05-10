@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: '100vh',
+    minHeight: '100vh',
     paddingBottom: 90,
     alignItems: 'center',
   },

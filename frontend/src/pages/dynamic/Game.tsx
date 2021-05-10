@@ -16,8 +16,14 @@ const useStyles = makeStyles(() => ({
   rootContainer: {
     display: 'flex',
     flexDirection: 'column',
+    minHeight: '100vh',
+    alignItems: 'center',
+  },
+  noReviewMessage: {
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
-    height: '100vh',
+    minHeight: '100vh',
     alignItems: 'center',
   },
   root: {
@@ -41,6 +47,7 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    paddingBottom: '30px',
   },
   cardheader: {
     display: 'flex',
@@ -217,7 +224,7 @@ function Game(): ReactElement {
       );
     } else {
       content = (
-        <>
+        <div className={classes.noReviewMessage}>
           <Typography variant="h4">
             There are currently no reviews for
             {' '}
@@ -234,7 +241,7 @@ function Game(): ReactElement {
           >
             Create a review!
           </Button>
-        </>
+        </div>
       );
     }
   }

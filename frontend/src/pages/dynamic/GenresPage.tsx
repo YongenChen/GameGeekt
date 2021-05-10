@@ -62,6 +62,8 @@ const useStyles = makeStyles({
     paddingLeft: '50px',
     paddingRight: '50px',
     justifyContent: 'center',
+    minHeight: '100vh',
+    paddingBottom: '30px',
   },
   root: {
     background: ' rgba( 172, 166, 215, 0.25 )',
@@ -115,7 +117,7 @@ function GenresPage(): ReactElement {
   }
   return (
     <div>
-      <Typography variant="h2" gutterBottom className={classes.genreTitle}>
+      <Typography variant="h1" gutterBottom className={classes.genreTitle}>
         { genre }
       </Typography>
       <Grid
