@@ -1,2 +1,2 @@
 cd ../frontend
-docker-compose up
+npm start

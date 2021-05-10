@@ -88,6 +88,23 @@ query returnCurrentUser {
 }
 `;
 
+const GET_GAMES = gql`
+  query{
+    games{
+    id,
+    name,
+    genre,
+    description,
+    imgLink,
+    reviews{
+      id,
+      reviewbody,
+      rating
+    }
+  }
+}
+  `;
+
 interface IReview {
   reviewbody: string;
   rating: number;
@@ -142,6 +159,9 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
   const { data } = useQuery<IResult>(CURRENT_USER);
   const [createReview] = useMutation<IVariables>(CREATE_REVIEW, {
     ignoreResults: true,
+    refetchQueries: [{
+      query: GET_GAMES,
+    }],
   });
 
   const formik = useFormik({
