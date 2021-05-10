@@ -65,6 +65,13 @@ const useStyles = makeStyles({
     minHeight: '100vh',
     paddingBottom: '30px',
   },
+  imageContainer: {
+    maxHeight: '250px',
+    height: '250px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   root: {
     background: ' rgba( 172, 166, 215, 0.25 )',
     boxShadow: '0 8px 32px 0 rgba( 0, 0, 0, 0.37 )',
@@ -131,12 +138,20 @@ function GenresPage(): ReactElement {
             <Link underline="none" component={RouterLink} to={`/games/${game.id}`}>
               <Card className={classes.root} variant="outlined">
                 <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="250"
-                    src={game.imgLink}
-                    alt={game.name}
-                  />
+                  <div className={classes.imageContainer}>
+                    {game.imgLink ? (
+                      <CardMedia
+                        component="img"
+                        height="250"
+                        src={game.imgLink}
+                        alt={game.name}
+                      />
+                    ) : (
+                      <Typography>
+                        No image found :(
+                      </Typography>
+                    )}
+                  </div>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
                       { game.name }
