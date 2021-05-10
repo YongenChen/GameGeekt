@@ -180,7 +180,6 @@ export default function RequestGameForm(): ReactElement {
     initialValues,
     validate,
     onSubmit: async (values) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await createGame({
         variables: {
           name: values.name,

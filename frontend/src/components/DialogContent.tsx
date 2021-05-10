@@ -154,7 +154,6 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
         });
         return;
       }
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await createReview({
         variables: {
           userid: +data.currentUser.id,

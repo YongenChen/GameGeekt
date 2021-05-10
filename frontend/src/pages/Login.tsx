@@ -117,7 +117,6 @@ export default function Login(): ReactElement {
     initialValues,
     validate,
     onSubmit: async (values) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await signIn({
         variables: {
           username: values.username,
