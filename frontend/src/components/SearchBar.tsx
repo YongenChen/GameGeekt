@@ -1,5 +1,12 @@
-import { InputAdornment, InputBase } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+import {
+  InputAdornment,
+  InputBase,
+  Typography,
+} from '@material-ui/core';
 import {
   makeStyles,
   createStyles,
@@ -9,13 +16,18 @@ import {
 import {
   Search as SearchIcon,
 } from '@material-ui/icons';
-import { Autocomplete } from '@material-ui/lab';
+import {
+  Autocomplete,
+} from '@material-ui/lab';
+import { gql, useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
+import { Genres } from '../utils/enums';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   searchIcon: {
     color: '#ffff',
   },
-  inputInput: {
+  inputBase: {
     color: '#ffff',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -29,70 +41,102 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-const games = [
-  'Valorant',
-  'CSGO',
-  'Dota 2',
-  'League of Legends',
-  'Among Us',
-  'It Takes Two',
-  'Age of Empires III',
-];
+interface IGame {
+  id: number;
+  name: string;
+  genre: Genres
+}
 
-interface IGameOption {
-    name: string;
+interface IQuery {
+  games: IGame[];
+}
+
+const SEARCH_GAMES = gql`
+  query{
+    games{
+      id
+      name
+      genre
+    }
   }
+`;
+
+const Genre = {
+  [Genres.ADVENTURE]: 'ADVENTURE',
+  [Genres.FPS]: 'FIRST PERSON SHOOTER',
+  [Genres.MMO]: 'MASSIVELY MULTIPLAYER ONLINE',
+  [Genres.MOBILE]: 'MOBILE GAMES',
+  [Genres.PUZZLE]: 'PUZZLE',
+  [Genres.MOBA]: 'MULTIPLAYER ONLINE BATTLE ARENA',
+  [Genres.RP]: 'ROLE PLAYING',
+  [Genres.RTS]: 'REAL TIME STRATEGY',
+  [Genres.SIMULATION]: 'SIMULATION',
+  [Genres.SPORTS]: 'SPORTS',
+
+};
 
 export default function SearchBar() {
   const classes = useStyles();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const handleChange = (event) => {
+  const history = useHistory();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [value, setValue] = useState<IGame|null>(null);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
+
+  const { data, refetch } = useQuery<IQuery>(SEARCH_GAMES);
+
+  // if a value is selected, redirect them
   useEffect(() => {
-    const results = games.filter((games) => games.toLowerCase().includes(searchTerm));
-    setSearchResults(results);
-  }, [searchTerm]);
+    if (value) {
+      history.push(`/games/${value.id}`);
+      setValue(null);
+      setSearchTerm('');
+    }
+  }, [value, setValue, history, setSearchTerm]);
 
   return (
-    <div>
-      <Autocomplete
-        id="auto-complete"
-        autoComplete
-        includeInputInList
-        renderInput={(params) => (
-          <InputBase
-            {...params}
-            startAdornment={(
-              <InputAdornment position="start">
-                <SearchIcon className={classes.searchIcon} />
-              </InputAdornment>
-        )}
-            className={classes.inputInput}
-            placeholder="Search for a game..."
-            value={searchTerm}
-            onChange={handleChange}
-          />
-        )}
-      />
-    </div>
+    <Autocomplete
+      fullWidth
+      value={value}
+      options={data?.games || []}
+      groupBy={(option) => Genre[option.genre]}
+      onChange={(_, newValue) => {
+        setValue(newValue);
+      }}
+      onOpen={() => {
+        refetch();
+      }}
+      getOptionLabel={(option) => option.name}
+      noOptionsText={searchTerm.length > 0 ? (
+        <Typography>
+          No games found
+        </Typography>
+      ) : (
+        <Typography>
+          Search game by title
+        </Typography>
+      )}
+      renderInput={(params) => {
+        const { InputLabelProps, InputProps, ...inputParams } = params;
+        return (
+          <div ref={InputProps.ref}>
+            <InputBase
+              placeholder="Search for a game..."
+              className={classes.inputBase}
+              startAdornment={(
+                <InputAdornment position="start">
+                  <SearchIcon className={classes.searchIcon} />
+                </InputAdornment>
+            )}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...inputParams}
+              onChange={handleChange}
+              value={searchTerm}
+            />
+          </div>
+        );
+      }}
+    />
   );
 }
-
-// const top100Films = [
-//   { title: 'The Shawshank Redemption', year: 1994 },
-//   { title: 'The Godfather', year: 1972 },
-//   { title: 'The Godfather: Part II', year: 1974 },
-//   { title: 'The Dark Knight', year: 2008 },
-//   { title: '12 Angry Men', year: 1957 },
-//   { title: "Schindler's List", year: 1993 },
-//   { title: 'Pulp Fiction', year: 1994 },
-//   { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
-//   { title: 'The Good, the Bad and the Ugly', year: 1966 },
-//   { title: 'Fight Club', year: 1999 },
-//   { title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001 },
-//   { title: 'Star Wars: Episode V - The Empire Strikes Back', year: 1980 },
-//   { title: 'Forrest Gump', year: 1994 },
-//   { title: 'Inception', year: 2010 },
-// ];

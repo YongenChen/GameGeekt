@@ -48,17 +48,12 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   dialog: {
-    background: '#22223B',
+    backgroundColor: '#22223B',
   },
   ratingContainer: {
     width: '100%',
     textAlign: 'left',
-  },
-  link: {
-    color: 'white',
-    '&:visited': {
-      color: '#fcdfd8',
-    },
+    display: 'flex',
   },
   submitButton: {
     height: '45px',
@@ -81,7 +76,7 @@ $gameid: Float!
   }) {
     id
   }
-    }
+}
 `;
 
 const CURRENT_USER = gql`
@@ -124,7 +119,10 @@ interface IProps {
     onClose: () => void;
 }
 
-const initialValues:IReview = { reviewbody: '', rating: 0 };
+const initialValues:IReview = {
+  reviewbody: '',
+  rating: 3.5,
+};
 const validate = (values:IReview) => {
   const errors:IReviewError = {};
   if (!values.reviewbody) {
@@ -142,17 +140,25 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useQuery<IResult>(CURRENT_USER);
-  const [createReview, { error }] = useMutation<IVariables>(CREATE_REVIEW);
+  const [createReview] = useMutation<IVariables>(CREATE_REVIEW, {
+    ignoreResults: true,
+  });
 
   const formik = useFormik({
     initialValues,
     validate,
     onSubmit: async (values) => {
+      if (!data || !data.currentUser) {
+        enqueueSnackbar('You are not logged in!', {
+          variant: 'error',
+        });
+        return;
+      }
       await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await createReview({
         variables: {
-          userid: data?.currentUser.id,
-          gameid,
+          userid: +data.currentUser.id,
+          gameid: +gameid,
           reviewbody: values.reviewbody,
           rating: values.rating,
         },
@@ -161,21 +167,18 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
         enqueueSnackbar('Successfully created a review!', {
           variant: 'success',
         });
+        onClose();
       }
     },
   });
-
-  const errorMessage:string|ReactElement|undefined = error?.message;
-  console.log(errorMessage);
 
   return (
     <DialogContent className={classes.dialog}>
       <DialogContentText className={classes.dialogText}>
         To create a review, fill in all the necessary blanks.
       </DialogContentText>
-      <form
+      <div
         className={classes.form}
-        onSubmit={formik.handleSubmit}
       >
         <TextField
           error={formik.touched.reviewbody && Boolean(formik.errors.reviewbody)}
@@ -192,21 +195,8 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
           fullWidth
           disabled={formik.isSubmitting}
           margin="dense"
+          color="secondary"
         />
-        {/* <TextField
-          error={formik.touched.rating && Boolean(formik.errors.rating)}
-          helperText={formik.touched.rating && formik.errors.rating}
-          label="Rating"
-          name="rating"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.rating}
-          variant="outlined"
-          required
-          fullWidth
-          disabled={formik.isSubmitting}
-          margin="dense"
-        /> */}
         <FormControl
           className={classes.ratingContainer}
           error={formik.touched.rating && Boolean(formik.errors.rating)}
@@ -216,13 +206,12 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
         >
           <FormLabel>
             Rating
-            <br />
           </FormLabel>
           <Rating
             name="rating"
             value={formik.values.rating}
             precision={0.5}
-            onChange={(event, newValue) => {
+            onChange={(_, newValue) => {
               formik.setFieldValue('rating', newValue);
             }}
           />
@@ -238,7 +227,7 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
             Cancel
           </Button>
           <Button
-            type="submit"
+            onClick={() => formik.submitForm()}
             color="secondary"
             disabled={!formik.dirty}
             className={classes.submitButton}
@@ -247,7 +236,7 @@ export default function CreateReview({ gameid, onClose }:IProps): ReactElement {
             {formik.isSubmitting ? <CircularProgress size="20px" color="primary" /> : 'Submit'}
           </Button>
         </DialogActions>
-      </form>
+      </div>
     </DialogContent>
   );
 }

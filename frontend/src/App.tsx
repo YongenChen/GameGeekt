@@ -20,7 +20,6 @@ import ContactUs from './pages/ContactUs';
 import TheTeam from './pages/TheTeam';
 import RequestGameForm from './pages/RequestGameForm';
 import Game from './pages/dynamic/Game';
-import PostReview from './pages/dynamic/PostReview';
 import Genres from './pages/dynamic/GenresPage';
 import NotFound from './pages/Error404';
 import AllGames from './pages/AllGames';
@@ -109,9 +108,6 @@ function App() {
             </Route>
             <Route path="/games/:id">
               <Game />
-            </Route>
-            <Route path="/Create-Review/:id">
-              <PostReview />
             </Route>
             <Route path="/genre/:genre">
               <Genres />

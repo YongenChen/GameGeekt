@@ -14,7 +14,7 @@ import Dialog from '@material-ui/core/Dialog';
 import { Genres } from '../../utils/enums';
 import DialogContent from '../../components/DialogContent';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   rootContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -85,6 +85,15 @@ const useStyles = makeStyles(() => ({
     border: '1px solid rgba( 255, 255, 255, 0.18 )',
     WebkitBackdropFilter: 'blur(7.0px)',
   },
+  img: {
+    maxWidth: '50%',
+    marginTop: theme.spacing(3),
+  },
+  description: {
+    marginTop: theme.spacing(3),
+    maxHeight: 100,
+    overflowY: 'auto',
+  },
 }));
 
 interface IReviewer {
@@ -145,43 +154,39 @@ query getGameReview($id: Int!) {
 }
 `;
 
-// ADD A BUTTON CALLED "ADD REVIEW" and  dialog component (form) that allows you
-// to submit data to server with graphql
-
-// Make the dialog component first then embed it in button on click
 function GameReviewItem({
   gameReview: {
-    reviewer, rating, reviewbody,
+    reviewer,
+    rating,
+    reviewbody,
   },
 }: IGameReviewItemProps): ReactElement {
   const classes = useStyles();
   return (
-    <>
-      <Grid item xs={12} sm={7} md={4}>
-        <Card className={classes.root} variant="outlined">
-          <CardHeader
-            className={classes.cardheader}
-            avatar={
-              <Avatar className={classes.avatar}><FaceIcon /></Avatar>
+    <Grid item xs={12} sm={6} md={4}>
+      <Card className={classes.root} variant="outlined">
+        <CardHeader
+          className={classes.cardheader}
+          avatar={
+            <Avatar className={classes.avatar}><FaceIcon /></Avatar>
             }
-            classes={{
-              title: classes.cardheader,
-              subheader: classes.cardheader,
-            }}
-            title={JSON.parse(JSON.stringify(reviewer.username))}
-            subheader={`Rating: ${rating}/5`}
-          />
-          <CardContent>
-            <Typography className={classes.cardContentTitle} variant="h5" component="h5">
-              Review:
-            </Typography>
-            <Typography className={classes.cardContent} variant="body1" component="h3">
-              {reviewbody}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-    </>
+          classes={{
+            title: classes.cardheader,
+            subheader: classes.cardheader,
+          }}
+          title={reviewer.username}
+          subheader={`Rating: ${rating}/5`}
+        />
+        <CardContent>
+          <Typography className={classes.cardContentTitle} variant="h5" component="h5">
+            Review:
+          </Typography>
+          <Typography className={classes.cardContent} variant="body1" component="h3">
+            {reviewbody}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
   );
 }
 
@@ -193,49 +198,57 @@ function Game(): ReactElement {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const { data, loading, error } = useQuery<IResponse, IVariables>(GET_GAME_REVIEWS, {
+  const {
+    data, loading, error, refetch,
+  } = useQuery<IResponse, IVariables>(GET_GAME_REVIEWS, {
     variables: {
       id: +id,
     },
+    fetchPolicy: 'no-cache',
   });
 
+  const handleClose = () => {
+    setOpen(false);
+    refetch();
+  };
   let content = (
     <CircularProgress />
   );
 
   if (!loading && data) {
+    const title = (
+      <>
+        {data.game.imgLink && (
+        <img
+          className={classes.img}
+          src={data.game.imgLink}
+          alt={`${data.game.name} Reviews`}
+        />
+        )}
+        <Typography className={classes.genreTitle} variant="h2">
+          {`${data.game.name} Reviews`}
+        </Typography>
+      </>
+    );
+    let reviewContent = null;
     if (data.game.reviews.length > 0) {
-      content = (
-        <>
-          <Typography className={classes.genreTitle} variant="h2">
-            {data.game.name}
-            {'  '}
-            Reviews
-          </Typography>
-          <Button
-            type="button"
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            onClick={handleClickOpen}
-          >
-            Create a review!
-          </Button>
-          <Grid
-            container
-            spacing={6}
-            className={classes.gridContainer}
-            justify="flex-start"
-          >
-            {data.game.reviews.map((gameReview) => <GameReviewItem gameReview={gameReview} />)}
-          </Grid>
-        </>
+      reviewContent = (
+        <Grid
+          container
+          spacing={6}
+          className={classes.gridContainer}
+          justify="flex-start"
+        >
+          {data.game.reviews.map((gameReview) => (
+            <GameReviewItem
+              key={gameReview.id}
+              gameReview={gameReview}
+            />
+          ))}
+        </Grid>
       );
     } else {
-      content = (
+      reviewContent = (
         <div className={classes.noReviewMessage}>
           <Typography variant="h4">
             There are currently no reviews for
@@ -243,25 +256,33 @@ function Game(): ReactElement {
             {data.game.name}
             .
           </Typography>
-          <br />
-          <Button
-            type="button"
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            onClick={handleClickOpen}
-          >
-            Create a review!
-          </Button>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle className={classes.dialog}>New Review</DialogTitle>
-            <DialogContent gameid={data.game.id} onClose={handleClose} />
-          </Dialog>
         </div>
       );
     }
+    content = (
+      <>
+        {title}
+        <Button
+          type="button"
+          variant="contained"
+          color="secondary"
+          className={classes.button}
+          onClick={handleClickOpen}
+        >
+          Create a review!
+        </Button>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle className={classes.dialog}>New Review</DialogTitle>
+          <DialogContent gameid={data.game.id} onClose={handleClose} />
+        </Dialog>
+        <Typography variant="body1" className={classes.description}>
+          {data.game.description}
+        </Typography>
+        {reviewContent}
+      </>
+    );
   }
-  if (error) {
+  if (!loading && error) {
     content = (
       <Typography variant="h2">
         Sorry, this request is invalid.

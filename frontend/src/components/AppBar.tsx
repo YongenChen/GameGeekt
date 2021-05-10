@@ -3,9 +3,7 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  InputBase,
   Grid,
-  InputAdornment,
 } from '@material-ui/core';
 import React, { ReactElement, useState } from 'react';
 import {
@@ -15,20 +13,14 @@ import {
   fade,
 } from '@material-ui/core/styles';
 import {
-  Menu as MenuIcon, Search as SearchIcon,
+  Menu as MenuIcon,
 } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import Drawer from './Drawer';
 import AuthAction from './AuthAction';
+import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
-  // appBar: {
-  // backgroundColor: theme.palette.type === 'light' ?
-  // 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-  // backdropFilter: 'blur(3px)',
-  // boxShadow: `1px 1px 1px 0 ${theme.palette.type === 'light' ?
-  // 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)'}`,
-  // },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -38,8 +30,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     WebkitTextFillColor: 'transparent',
     WebkitTextStrokeWidth: '0.8px',
     WebkitTextStrokeColor: 'white',
-    //  color: theme.palette.type === 'light' ?
-    //  theme.palette.secondary.main : theme.palette.secondary.light,
     textDecoration: 'none',
     fontFamily: "'Press Start 2P', Roboto",
     fontSize: '35px',
@@ -143,22 +133,12 @@ export default function AppBar({ getGlobalTheme }: Props): ReactElement {
             </div>
           </Grid>
           <Grid item xs={6} className={classes.searchContainer}>
-            <InputBase
-              startAdornment={(
-                <InputAdornment position="start">
-                  <SearchIcon className={classes.searchIcon} />
-                </InputAdornment>
-            )}
-              className={classes.inputInput}
-              placeholder="Search for a game..."
-            />
+            <SearchBar />
           </Grid>
           <Grid item xs className={classes.actionContainer}>
             <AuthAction />
           </Grid>
         </Grid>
-
-        {/* <div className={classes.fillGap} /> */}
       </Toolbar>
     </MUIAppBar>
   );
