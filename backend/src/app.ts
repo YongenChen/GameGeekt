@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import 'reflect-metadata';
-import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express';
 import Redis from 'ioredis';
@@ -35,12 +34,10 @@ async function main() {
   const redisClient = new Redis({ host: process.env.redishost });
 
   const app = express();
-  app.use(
-    cors({
-      origin: process.env.origin,
-      credentials: true, // <-- REQUIRED backend setting
-    }),
-  );
+  const corsConfig = {
+    origin: process.env.origin,
+    credentials: true, // <-- REQUIRED backend setting
+  };
   app.use(
     session({
       store: new RedisStore({
@@ -72,7 +69,7 @@ async function main() {
   });
   await server.start();
 
-  server.applyMiddleware({ app, cors: false });
+  server.applyMiddleware({ app, cors: corsConfig });
 
   app.use((_, res) => {
     res.status(200);
