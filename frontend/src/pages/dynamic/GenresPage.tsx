@@ -6,12 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
-// import StarIcon from '@material-ui/icons/Star';
-// import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { Grid } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import noImageFound from '../../images/NoImage.jpg';
+import ImageIcon from '@material-ui/icons/Image';
 import { Genres } from '../../utils/enums';
 
 interface IGame {
@@ -69,10 +67,13 @@ const useStyles = makeStyles({
   imageContainer: {
     maxHeight: '250px',
     height: '250px',
-    width: '460px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  imageIcon: {
+    height: '135px',
+    width: '135px',
   },
   root: {
     background: ' rgba( 172, 166, 215, 0.25 )',
@@ -140,7 +141,7 @@ function GenresPage(): ReactElement {
             <Link underline="none" component={RouterLink} to={`/games/${game.id}`}>
               <Card className={classes.root} variant="outlined">
                 <CardActionArea>
-                  <div>
+                  <div className={classes.imageContainer}>
                     {game.imgLink ? (
                       <CardMedia
                         component="img"
@@ -149,7 +150,7 @@ function GenresPage(): ReactElement {
                         alt={game.name}
                       />
                     ) : (
-                      <img src={noImageFound} alt="not found" className={classes.imageContainer} />
+                      <ImageIcon className={classes.imageIcon} />
                     )}
                   </div>
                   <CardContent>
