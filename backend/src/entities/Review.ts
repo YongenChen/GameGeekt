@@ -20,14 +20,14 @@ export default class Review extends BaseEntity {
     rating: number;
 
     @Field()
-    @Column({ type: 'varchar', unique: true, length: 255 })
+    @Column({ type: 'varchar', unique: false, length: 255 })
     reviewbody: string;
 
     @Field(() => User)
-    @ManyToOne(() => User, (user) => user.reviews, { eager: true })
+    @ManyToOne(() => User, (user: User) => user.reviews, { eager: true })
     reviewer: User;
 
     @Field(() => Game)
-    @ManyToOne(() => Game, (game) => game.reviews, { eager: true })
+    @ManyToOne(() => Game, (game: Game) => game.reviews, { eager: true })
     game: Game;
 }
