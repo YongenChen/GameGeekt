@@ -75,7 +75,7 @@ function Drawer({
           <ListItem
             button
             component={Link}
-            to="/games/all"
+            to="/games"
             onClick={onClose}
             className={classes.listItemBorder}
           >

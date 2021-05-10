@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useHistory } from 'react-router';
 import { AlertTitle, Alert } from '@material-ui/lab';
 import { useSnackbar } from 'notistack';
@@ -82,6 +82,48 @@ mutation createGame(
 }
 `;
 
+const CURRENT_USER = gql`
+query returnCurrentUser {
+  currentUser {
+    username,
+    id
+  }
+}
+`;
+
+const GET_GAMES_BY_GENRES = gql`
+query GetGames($genre: Genre!){
+  searchGamesByGenre(genre: $genre){
+    id,
+    name,
+    genre,
+    description,
+    imgLink,
+    reviews{
+      id,
+      reviewbody
+    }
+  }
+}
+`;
+
+const GET_GAMES = gql`
+  query{
+    games{
+    id,
+    name,
+    genre,
+    description,
+    imgLink,
+    reviews{
+      id,
+      reviewbody,
+      rating
+    }
+  }
+}
+  `;
+
 interface IRequestGame {
   name: string;
   genre: Genres;
@@ -94,6 +136,15 @@ interface IRequestGameError {
   genre?: string;
   description?: string;
   imgLink?: string;
+}
+
+interface ICurrentUser {
+  username: string;
+  id: string;
+}
+
+interface IResult {
+  currentUser: ICurrentUser;
 }
 
 const initialValues:IRequestGame = {
@@ -174,12 +225,20 @@ export default function RequestGameForm(): ReactElement {
   const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const [createGame, { error }] = useMutation(CREATE_GAME);
-
+  const [createGame, { error }] = useMutation(CREATE_GAME, {
+    ignoreResults: true,
+  });
+  const { data } = useQuery<IResult>(CURRENT_USER);
   const formik = useFormik({
     initialValues,
     validate,
     onSubmit: async (values) => {
+      if (!data || !data.currentUser) {
+        enqueueSnackbar('You are not logged in!', {
+          variant: 'error',
+        });
+        return;
+      }
       const response = await createGame({
         variables: {
           name: values.name,
@@ -187,6 +246,12 @@ export default function RequestGameForm(): ReactElement {
           description: values.description,
           imgLink: values.imgLink,
         },
+        refetchQueries: [{
+          query: GET_GAMES_BY_GENRES,
+          variables: { genre: values.genre },
+        }, {
+          query: GET_GAMES,
+        }],
       });
       if (response.data) {
         enqueueSnackbar(`Successfully requested "${values.name}"`, {

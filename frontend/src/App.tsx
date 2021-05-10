@@ -103,7 +103,7 @@ function App() {
             <Route path="/Request-Game-Form">
               <RequestGameForm />
             </Route>
-            <Route path="/games/all">
+            <Route path="/games">
               <AllGames />
             </Route>
             <Route path="/games/:id">
